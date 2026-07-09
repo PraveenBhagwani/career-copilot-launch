@@ -15,7 +15,7 @@ function Refer() {
     typeof window !== "undefined"
       ? `${window.location.origin}/?ref=${referralCode}`
       : `https://careercopilot.ai/?ref=${referralCode}`;
-  const shareText = `I just got a 96% ATS resume with Career Copilot AI. Use my code ${referralCode} and get 10 free AI credits.`;
+  
 
   const copy = async () => {
     try {
