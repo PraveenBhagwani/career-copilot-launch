@@ -1,0 +1,100 @@
+import { Lock, Sparkles, Zap } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useDashboard } from "@/lib/dashboard-store";
+
+const PACKS = [
+  { price: 149, credits: 20 },
+  { price: 299, credits: 50, popular: true },
+  { price: 499, credits: 100 },
+];
+
+export function TopUpDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
+  const { plan, setPlan, addCredits } = useDashboard();
+
+  const upgrade = () => {
+    setPlan("Pro");
+    toast.success("Welcome to Pro! The credit store is unlocked.");
+  };
+
+  const buy = (credits: number, price: number) => {
+    addCredits(credits);
+    toast.success(`Payment received — ${credits} credits added.`, {
+      description: `₹${price} · UPI mock payment`,
+    });
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        {plan === "Free" ? (
+          <>
+            <DialogHeader>
+              <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+                <Lock className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <DialogTitle className="text-center">Top-ups are Pro only</DialogTitle>
+              <DialogDescription className="text-center">
+                🔒 Top-ups are reserved for Pro/Max members. Upgrade to Pro (₹299) to unlock the
+                credit store.
+              </DialogDescription>
+            </DialogHeader>
+            <Button onClick={upgrade} className="w-full gap-2" size="lg">
+              <Sparkles className="h-4 w-4" /> Upgrade to Pro — ₹299
+            </Button>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle>Buy AI Credits</DialogTitle>
+              <DialogDescription>Pay instantly via UPI. Credits never expire.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-2">
+              {PACKS.map((p) => (
+                <button
+                  key={p.price}
+                  onClick={() => buy(p.credits, p.price)}
+                  className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 text-left transition hover:border-primary hover:bg-secondary"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Zap className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="font-semibold">{p.credits} Credits</div>
+                      <div className="text-xs text-muted-foreground">
+                        ₹{(p.price / p.credits).toFixed(2)} per credit
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {p.popular && (
+                      <span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success-foreground">
+                        Popular
+                      </span>
+                    )}
+                    <span className="text-lg font-bold">₹{p.price}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
