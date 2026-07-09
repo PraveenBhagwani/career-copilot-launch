@@ -13,9 +13,10 @@ const TITLES: Record<string, string> = {
 };
 
 export function DashboardHeader() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = useRouterState((s) => s.location.pathname);
   const { plan, setPlan } = useDashboard();
   const title = TITLES[pathname] ?? "Dashboard";
+  const nextPlan = plan === "Free" ? "Pro" : plan === "Pro" ? "Max" : "Free";
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur">
@@ -26,13 +27,17 @@ export function DashboardHeader() {
         <Button
           size="sm"
           variant="outline"
-          onClick={() => setPlan(plan === "Free" ? "Pro" : "Free")}
+          onClick={() => setPlan(nextPlan)}
           className="hidden gap-1.5 sm:inline-flex"
-          title="Toggle plan (demo)"
+          title={`Toggle plan (demo) — switch to ${nextPlan}`}
         >
           <span
             className={`inline-block h-1.5 w-1.5 rounded-full ${
-              plan === "Pro" ? "bg-success" : "bg-muted-foreground"
+              plan === "Max"
+                ? "bg-primary"
+                : plan === "Pro"
+                  ? "bg-success"
+                  : "bg-muted-foreground"
             }`}
           />
           {plan}
