@@ -10,11 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResultsRouteImport } from './routes/results'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardReferRouteImport } from './routes/dashboard.refer'
+import { Route as DashboardJobsRouteImport } from './routes/dashboard.jobs'
+import { Route as DashboardCoachRouteImport } from './routes/dashboard.coach'
 
 const ResultsRoute = ResultsRouteImport.update({
   id: '/results',
   path: '/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,30 +32,86 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardReferRoute = DashboardReferRouteImport.update({
+  id: '/refer',
+  path: '/refer',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardJobsRoute = DashboardJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCoachRoute = DashboardCoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/results': typeof ResultsRoute
+  '/dashboard/coach': typeof DashboardCoachRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/refer': typeof DashboardReferRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/results': typeof ResultsRoute
+  '/dashboard/coach': typeof DashboardCoachRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/refer': typeof DashboardReferRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/results': typeof ResultsRoute
+  '/dashboard/coach': typeof DashboardCoachRoute
+  '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/refer': typeof DashboardReferRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/results'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/results'
+    | '/dashboard/coach'
+    | '/dashboard/jobs'
+    | '/dashboard/refer'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/results'
-  id: '__root__' | '/' | '/results'
+  to:
+    | '/'
+    | '/results'
+    | '/dashboard/coach'
+    | '/dashboard/jobs'
+    | '/dashboard/refer'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/results'
+    | '/dashboard/coach'
+    | '/dashboard/jobs'
+    | '/dashboard/refer'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   ResultsRoute: typeof ResultsRoute
 }
 
@@ -58,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,11 +138,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/refer': {
+      id: '/dashboard/refer'
+      path: '/refer'
+      fullPath: '/dashboard/refer'
+      preLoaderRoute: typeof DashboardReferRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/jobs': {
+      id: '/dashboard/jobs'
+      path: '/jobs'
+      fullPath: '/dashboard/jobs'
+      preLoaderRoute: typeof DashboardJobsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/coach': {
+      id: '/dashboard/coach'
+      path: '/coach'
+      fullPath: '/dashboard/coach'
+      preLoaderRoute: typeof DashboardCoachRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardCoachRoute: typeof DashboardCoachRoute
+  DashboardJobsRoute: typeof DashboardJobsRoute
+  DashboardReferRoute: typeof DashboardReferRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardCoachRoute: DashboardCoachRoute,
+  DashboardJobsRoute: DashboardJobsRoute,
+  DashboardReferRoute: DashboardReferRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   ResultsRoute: ResultsRoute,
 }
 export const routeTree = rootRouteImport

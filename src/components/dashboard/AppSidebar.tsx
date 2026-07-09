@@ -12,12 +12,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-const items = [
+const items: Array<{ title: string; url: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }> = [
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
   { title: "Jobs", url: "/dashboard/jobs", icon: Briefcase },
   { title: "AI Coach", url: "/dashboard/coach", icon: MessageSquareText },
   { title: "Refer & Earn", url: "/dashboard/refer", icon: Gift },
-] as const;
+];
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
