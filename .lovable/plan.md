@@ -1,58 +1,64 @@
-# Career Copilot AI — Landing Page Plan
+# User Dashboard
 
-A single-route marketing + conversion page with a stateful hero card that walks through: JD/Resume upload → phone → OTP → skeleton loading → mock score result.
+New route tree under `/dashboard` using shadcn `Sidebar` + Radix primitives. All state is client-side mock (no backend). Plan mode currently reads `Free`; toggle via a small dev switch in the header for demo.
 
-## Design System
+## Routes
 
-Update `src/styles.css` tokens to the requested palette:
-- Background: crisp white
-- Foreground / text: slate gray (deep + muted variants)
-- Primary (trust blue): a confident blue (`oklch` around 0.55 / 0.19 / 255)
-- Success / accent (neon green): high-chroma green for metrics + progress
-- Keep radii soft, add subtle elevated shadow token for the core card
+- `src/routes/dashboard.tsx` — layout: `SidebarProvider` + `AppSidebar` + top header + `<Outlet />`.
+- `src/routes/dashboard.index.tsx` — Overview (redirects/renders summary).
+- `src/routes/dashboard.jobs.tsx` — Job cards.
+- `src/routes/dashboard.coach.tsx` — AI Coach chat.
+- `src/routes/dashboard.refer.tsx` — Refer & Earn.
 
-Load a distinctive type pair via `<link>` in `__root.tsx` head (e.g. Space Grotesk display + Inter body) and register `--font-display` / `--font-sans` in `@theme`. Update root `head()` with real title/description/OG for "Career Copilot AI — Beat the ATS".
+## Shared state
 
-## Page Structure (`src/routes/index.tsx`)
+`src/lib/dashboard-store.ts` — tiny Zustand-free module using React context:
+- `credits: number` (default 3)
+- `plan: 'Free' | 'Pro'` (default Free, toggle in header for demo)
+- `addCredits(n)`, `spendCredits(n)`, `setPlan(p)`
+- `referralCode` — generated once on mount (e.g. `PRAV` + 3 digits from `crypto.getRandomValues`), persisted in `localStorage`.
 
-1. **Sticky top nav** — wordmark left, anchor links (Product, How it works, Pricing), CTA button right.
-2. **Hero** — two-column on desktop:
-   - Left: eyebrow badge ("AI Resume Optimizer"), H1 "Stop Getting Ghosted by ATS Systems.", subtext as specified, small trust row (logos / "10,000+ resumes optimized").
-   - Right: the **Core Action Card** (stateful, see below).
-3. **How it works** — 3 steps (Paste JD → Upload Resume → Get 95% match).
-4. **Social proof** — testimonial cards + neon-green success metrics ("3.4x more interviews", "95% ATS match avg").
-5. **Feature grid** — ATS keyword matching, AI rewrite, interview probability, one-click apply-ready export.
-6. **FAQ** + **Footer**.
+Wrap `<Outlet />` in `DashboardProvider` inside `dashboard.tsx`.
 
-## Core Action Card — State Machine
+## Components
 
-Component: `src/components/CoreActionCard.tsx`. Local state `step: 'input' | 'phone' | 'otp' | 'loading' | 'result'`.
+`src/components/dashboard/`
+- `AppSidebar.tsx` — shadcn `Sidebar` with items: Overview, Jobs, AI Coach, Refer & Earn. Uses `<Link>` + `useRouterState` for active state. Collapsible icon variant; `SidebarTrigger` in header.
+- `WalletPill.tsx` — pill showing `Credits: N`. When `credits === 0`, renders "Top-Up" button that opens `TopUpDialog`; when > 0, still shows a smaller "Top-Up" ghost button.
+- `TopUpDialog.tsx` — Radix `Dialog`. If `plan === 'Free'`: lock icon + copy `🔒 Top-ups are reserved for Pro/Max members. Upgrade to Pro (₹299)…` + "Upgrade to Pro" button (mock: sets plan to Pro + toast). If `plan === 'Pro'`: three package buttons `₹149 → 20`, `₹299 → 50`, `₹499 → 100`, each adds credits + success toast + closes.
+- `DashboardHeader.tsx` — `SidebarTrigger`, page title (derived from route), plan badge + Free/Pro dev toggle, `WalletPill`.
 
-- **input**: Textarea "Paste Job Description" + drag-and-drop dropzone (native `onDragOver/onDrop`, hidden `<input type="file" accept=".pdf,.docx">`, shows filename chip once selected). Primary button "Calculate My Score" (disabled until both filled).
-- **phone**: Replaces card contents. Country code prefix + phone input. "Send verification code" button.
-- **otp**: 4 separate digit inputs with auto-advance + paste support. Consent microcopy directly below: *"By verifying this OTP, you agree to our Terms of Service & Privacy Policy."* (links styled as underlined muted text). "Verify & Analyze" button.
-- **loading**: Skeleton layout of the eventual result (score ring placeholder, keyword bars, resume preview lines) with a cycling status line that rotates every ~1.2s: "Parsing Resume..." → "Checking Keywords..." → "Calculating Interview Probability..." via `setInterval` in `useEffect`. Animated shimmer via Tailwind.
-- **result**: Mock output — big neon-green **92% Interview Probability** ring, matched/missing keyword chips, "Rewrite my resume" CTA. (Kept simple; primary deliverable is the flow.)
+## Page contents
 
-All transitions use a subtle fade/slide (framer-motion `AnimatePresence`).
+**Overview** — greeting card, quick stats (ATS score 65→95 hook back to `/results`), CTA "Run a new scan" → `/`.
 
-## Referral Tracking
+**Jobs** — 3 cards (grid, `Card` primitive). Mock data:
+1. Operations Manager — Amazon — Bengaluru — 95% match — apply URL amazon.jobs.
+2. Customer Success Lead — Razorpay — Remote — 92%.
+3. Program Manager — Flipkart — Gurugram — 88%.
+Each: company logo circle (initials), title, meta row, match chip (neon green), "Apply Now" button → `<a target="_blank" rel="noopener">`.
 
-In the index route component, a `useEffect` on mount reads `new URLSearchParams(window.location.search).get('ref')` and, if present, writes it to `localStorage` under key `cc_referral` (only if not already set, to preserve first-touch). No UI. Guarded by `typeof window !== 'undefined'` inside the effect (safe post-hydration).
+**Refer & Earn** — Headline "Give a 96% Resume, Get 10 AI Credits.", subtext, big code box with referral code + "Copy" button (uses `navigator.clipboard`, toast), LinkedIn-blue button "Share on LinkedIn" that opens `https://www.linkedin.com/sharing/share-offsite/?url=...&text=...` in new tab. Small stats row: "Friends joined: 0 · Credits earned: 0" (static mock).
 
-## Technical Notes
+**AI Coach** — `Chatbot.tsx`:
+- Message list (user right, bot left, avatars, Radix `ScrollArea`).
+- Initial bot message hard-coded (the JD/interview copy).
+- Input + Send button. Input `disabled` until `consented === true`.
+- Consent gate: while not consented, only accepts `Yes` (case-insensitive); anything else shows a tooltip / inline hint "Type Yes to continue." Once user sends "Yes":
+  - `spendCredits(10)` (toast if insufficient — but proceeds in mock).
+  - Bot replies "Great — paste the JD to begin." then a canned back-and-forth of ~4 mock exchanges triggered as user sends messages (round-robin from a scripted array).
+- Uses `setTimeout` (600–900ms) for bot typing indicator (three-dot animation).
 
-- All new UI is presentational — no backend, no Lovable Cloud. Phone/OTP/score are mocked in component state.
-- Add `framer-motion` via `bun add framer-motion` for card transitions + subtle hero animation.
-- Use existing shadcn `Button`, `Input`, `Textarea`, `Card` primitives; add `InputOTP` if not present.
-- Semantic tokens only — no hardcoded hex in components.
-- Update `__root.tsx` `head()` with real SEO metadata.
-- Replace the placeholder in `src/routes/index.tsx` entirely.
+## Nav entry
 
-## Files Touched
+Add "Dashboard" link in the landing page's top nav (`src/components/landing/Nav` or wherever it lives — check + patch) and a "Go to Dashboard" button on `/results` after mock payment success.
 
-- `src/styles.css` — palette, fonts, shadow tokens
-- `src/routes/__root.tsx` — head metadata, font `<link>`
-- `src/routes/index.tsx` — full landing page + referral effect
-- `src/components/CoreActionCard.tsx` — stateful card
-- `src/components/landing/*` — Nav, Hero, HowItWorks, SocialProof, Features, FAQ, Footer (small focused files)
+## Files touched / created
+
+- New: `src/routes/dashboard.tsx`, `dashboard.index.tsx`, `dashboard.jobs.tsx`, `dashboard.coach.tsx`, `dashboard.refer.tsx`
+- New: `src/lib/dashboard-store.tsx` (context + provider + hook)
+- New: `src/components/dashboard/{AppSidebar,DashboardHeader,WalletPill,TopUpDialog,JobCard,Chatbot}.tsx`
+- Patched: landing nav for a "Dashboard" link; `results.tsx` post-payment CTA
+- shadcn primitives to add if missing: `sidebar`, `dialog`, `scroll-area`, `avatar`, `tooltip` (via `bunx shadcn@latest add …`)
+
+No backend, no Cloud. All persistence is `localStorage` (referral code + plan).
