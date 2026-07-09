@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, FileText, Loader2, Phone, ShieldCheck, Sparkles, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ const LOADING_MESSAGES = [
 ];
 
 export function CoreActionCard() {
+  const navigate = useNavigate();
   const [step, setStep] = useState<Step>("input");
   const [jd, setJd] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -31,14 +33,14 @@ export function CoreActionCard() {
       setLoadingIdx((i) => {
         if (i >= LOADING_MESSAGES.length - 1) {
           clearInterval(iv);
-          setTimeout(() => setStep("result"), 900);
+          setTimeout(() => navigate({ to: "/results" }), 700);
           return i;
         }
         return i + 1;
       });
     }, 1400);
     return () => clearInterval(iv);
-  }, [step]);
+  }, [step, navigate]);
 
   const handleFile = (f: File | null) => {
     if (!f) return;
