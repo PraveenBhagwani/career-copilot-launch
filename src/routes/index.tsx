@@ -373,9 +373,9 @@ function FAQ() {
         <div className="mt-14 rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-[var(--shadow-elevated)]">
           <h3 className="font-display text-3xl font-semibold tracking-tight">Your next interview is one upload away.</h3>
           <p className="mx-auto mt-2 max-w-md text-sm opacity-90">Join 12,400+ job seekers using Career Copilot to skip the ghost pile.</p>
-          <a href="#" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90">
+          <Link to="/dashboard" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90">
             Get my score free <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
