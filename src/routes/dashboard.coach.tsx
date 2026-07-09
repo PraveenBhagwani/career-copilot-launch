@@ -123,6 +123,17 @@ function Coach() {
             disabled={inputDisabled}
             className="flex-1"
           />
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            onClick={() => toast("Voice mode coming soon", { description: "Tap the mic to speak your answer." })}
+            title="Voice mode (beta)"
+            className="relative"
+          >
+            <span className="absolute inset-0 animate-pulse rounded-md bg-primary/15" />
+            <Mic className="relative h-4 w-4 text-primary" />
+          </Button>
           <Button type="submit" size="icon" disabled={!input.trim()}>
             <Send className="h-4 w-4" />
           </Button>
