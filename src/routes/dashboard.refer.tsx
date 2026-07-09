@@ -27,10 +27,10 @@ function Refer() {
   };
 
   const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      shareUrl,
-    )}&text=${encodeURIComponent(shareText)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(
+      "https://www.linkedin.com/sharing/share-offsite/?url=careercopilot.ai",
+      "_blank",
+    );
   };
 
   return (
