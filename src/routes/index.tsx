@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -70,24 +70,31 @@ function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <BrainCircuit className="h-4 w-4" />
           </div>
           <span className="font-display text-base font-semibold tracking-tight">
             Career Copilot<span className="text-primary">.ai</span>
           </span>
-        </a>
+        </Link>
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#how" className="text-sm text-muted-foreground hover:text-foreground">How it works</a>
           <a href="#features" className="text-sm text-muted-foreground hover:text-foreground">Features</a>
+          <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</Link>
+          <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</Link>
           <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
-          <button className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block">
+          <Link
+            to="/dashboard"
+            className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
+          >
             Sign in
-          </button>
-          <Button className="rounded-lg bg-primary font-semibold">Get started</Button>
+          </Link>
+          <Button asChild className="rounded-lg bg-primary font-semibold">
+            <Link to="/dashboard">Get started</Link>
+          </Button>
         </div>
       </div>
     </header>
@@ -366,9 +373,9 @@ function FAQ() {
         <div className="mt-14 rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-[var(--shadow-elevated)]">
           <h3 className="font-display text-3xl font-semibold tracking-tight">Your next interview is one upload away.</h3>
           <p className="mx-auto mt-2 max-w-md text-sm opacity-90">Join 12,400+ job seekers using Career Copilot to skip the ghost pile.</p>
-          <a href="#" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90">
+          <Link to="/dashboard" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90">
             Get my score free <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

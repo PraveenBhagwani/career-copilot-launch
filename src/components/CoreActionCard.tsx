@@ -288,17 +288,20 @@ export function CoreActionCard() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
 
-                <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
-                  By verifying this OTP, you agree to our{" "}
-                  <a href="#" className="underline underline-offset-2 hover:text-foreground">
-                    Terms of Service
-                  </a>{" "}
-                  &amp;{" "}
-                  <a href="#" className="underline underline-offset-2 hover:text-foreground">
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
+                <div className="rounded-xl border border-border/60 bg-secondary/40 px-4 py-3 text-center">
+                  <p className="text-[11px] leading-relaxed text-muted-foreground">
+                    <ShieldCheck className="mr-1 inline h-3 w-3 text-primary" />
+                    By verifying this OTP, you explicitly agree to our{" "}
+                    <a href="#" className="font-medium text-foreground underline underline-offset-2 hover:text-primary">
+                      Terms of Service
+                    </a>{" "}
+                    &amp;{" "}
+                    <a href="#" className="font-medium text-foreground underline underline-offset-2 hover:text-primary">
+                      Privacy Policy
+                    </a>{" "}
+                    for AI processing.
+                  </p>
+                </div>
               </motion.div>
             )}
 

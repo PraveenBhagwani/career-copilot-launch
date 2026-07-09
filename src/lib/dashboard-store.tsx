@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-type Plan = "Free" | "Pro";
+export type Plan = "Free" | "Pro" | "Max";
 
 type DashboardState = {
   credits: number;
@@ -37,7 +37,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("cc_refcode", ref);
       }
       if (c !== null) setCredits(Number(c));
-      if (p === "Free" || p === "Pro") setPlanState(p);
+      if (p === "Free" || p === "Pro" || p === "Max") setPlanState(p);
       setReferralCode(ref);
     } catch {}
   }, []);

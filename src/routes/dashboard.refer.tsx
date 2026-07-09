@@ -15,7 +15,7 @@ function Refer() {
     typeof window !== "undefined"
       ? `${window.location.origin}/?ref=${referralCode}`
       : `https://careercopilot.ai/?ref=${referralCode}`;
-  const shareText = `I just got a 96% ATS resume with Career Copilot AI. Use my code ${referralCode} and get 10 free AI credits.`;
+  
 
   const copy = async () => {
     try {
@@ -27,10 +27,10 @@ function Refer() {
   };
 
   const shareOnLinkedIn = () => {
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-      shareUrl,
-    )}&text=${encodeURIComponent(shareText)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(
+      "https://www.linkedin.com/sharing/share-offsite/?url=careercopilot.ai",
+      "_blank",
+    );
   };
 
   return (

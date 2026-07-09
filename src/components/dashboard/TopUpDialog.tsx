@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Lock, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,45 +24,46 @@ export function TopUpDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const { plan, setPlan, addCredits } = useDashboard();
-
-  const upgrade = () => {
-    setPlan("Pro");
-    toast.success("Welcome to Pro! The credit store is unlocked.");
-  };
+  const { plan, addCredits } = useDashboard();
 
   const buy = (credits: number, price: number) => {
     addCredits(credits);
     toast.success(`Payment received — ${credits} credits added.`, {
-      description: `₹${price} · UPI mock payment`,
+      description: `₹${price} · UPI mock payment · Instant AI delivery, non-refundable.`,
     });
     onOpenChange(false);
   };
 
+  const locked = plan === "Free";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        {plan === "Free" ? (
+        {locked ? (
           <>
             <DialogHeader>
               <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
                 <Lock className="h-5 w-5 text-muted-foreground" />
               </div>
-              <DialogTitle className="text-center">Top-ups are Pro only</DialogTitle>
+              <DialogTitle className="text-center">Top-ups are Pro/Max only</DialogTitle>
               <DialogDescription className="text-center">
-                🔒 Top-ups are reserved for Pro/Max members. Upgrade to Pro (₹299) to unlock the
-                credit store.
+                🔒 Standalone top-ups are reserved for Pro/Max members. Upgrade to Pro (₹299) to
+                unlock the credit store.
               </DialogDescription>
             </DialogHeader>
-            <Button onClick={upgrade} className="w-full gap-2" size="lg">
-              <Sparkles className="h-4 w-4" /> Upgrade to Pro — ₹299
+            <Button asChild className="w-full gap-2" size="lg" onClick={() => onOpenChange(false)}>
+              <Link to="/pricing">
+                <Sparkles className="h-4 w-4" /> See plans — Starter / Pro / Max
+              </Link>
             </Button>
           </>
         ) : (
           <>
             <DialogHeader>
               <DialogTitle>Buy AI Credits</DialogTitle>
-              <DialogDescription>Pay instantly via UPI. Credits never expire.</DialogDescription>
+              <DialogDescription>
+                Pay instantly via UPI. Credits never expire. Instant AI delivery, non-refundable.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-2">
               {PACKS.map((p) => (
@@ -92,6 +94,13 @@ export function TopUpDialog({
                 </button>
               ))}
             </div>
+            {plan === "Pro" && (
+              <Button asChild variant="outline" size="sm" className="mt-1">
+                <Link to="/pricing" onClick={() => onOpenChange(false)}>
+                  Compare Pro vs Max →
+                </Link>
+              </Button>
+            )}
           </>
         )}
       </DialogContent>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Bot, Send, User } from "lucide-react";
+import { Bot, Mic, Send, User } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/dashboard/coach")({
 type Msg = { id: number; role: "bot" | "user"; text: string };
 
 const INITIAL_BOT =
-  "Paste your Job Description (JD), and I'll conduct a mock interview tailored to that role. This session will cost 10 AI Credits. Type Yes if you'd like to proceed.";
+  "Paste your Job Description (JD), and I'll conduct a mock interview tailored to that role. This costs 10 Credits. Type YES to proceed.";
 
 const INTERVIEW_SCRIPT = [
   "Great — paste the JD below and I'll get started. To warm up: tell me about a time you led a cross-functional project under a tight deadline.",
@@ -123,6 +123,17 @@ function Coach() {
             disabled={inputDisabled}
             className="flex-1"
           />
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            onClick={() => toast("Voice mode coming soon", { description: "Tap the mic to speak your answer." })}
+            title="Voice mode (beta)"
+            className="relative"
+          >
+            <span className="absolute inset-0 animate-pulse rounded-md bg-primary/15" />
+            <Mic className="relative h-4 w-4 text-primary" />
+          </Button>
           <Button type="submit" size="icon" disabled={!input.trim()}>
             <Send className="h-4 w-4" />
           </Button>
