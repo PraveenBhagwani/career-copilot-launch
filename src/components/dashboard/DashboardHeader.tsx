@@ -13,7 +13,7 @@ const TITLES: Record<string, string> = {
 };
 
 export function DashboardHeader() {
-  const pathname = useRouterState((s) => s.location.pathname);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { plan, setPlan } = useDashboard();
   const title = TITLES[pathname] ?? "Dashboard";
   const nextPlan = plan === "Free" ? "Pro" : plan === "Pro" ? "Max" : "Free";
