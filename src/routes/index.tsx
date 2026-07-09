@@ -70,24 +70,31 @@ function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <BrainCircuit className="h-4 w-4" />
           </div>
           <span className="font-display text-base font-semibold tracking-tight">
             Career Copilot<span className="text-primary">.ai</span>
           </span>
-        </a>
+        </Link>
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#how" className="text-sm text-muted-foreground hover:text-foreground">How it works</a>
           <a href="#features" className="text-sm text-muted-foreground hover:text-foreground">Features</a>
+          <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</Link>
+          <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</Link>
           <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
-          <button className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block">
+          <Link
+            to="/dashboard"
+            className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
+          >
             Sign in
-          </button>
-          <Button className="rounded-lg bg-primary font-semibold">Get started</Button>
+          </Link>
+          <Button asChild className="rounded-lg bg-primary font-semibold">
+            <Link to="/dashboard">Get started</Link>
+          </Button>
         </div>
       </div>
     </header>
