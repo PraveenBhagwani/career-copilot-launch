@@ -15,7 +15,7 @@ export const Route = createFileRoute("/dashboard/coach")({
 type Msg = { id: number; role: "bot" | "user"; text: string };
 
 const INITIAL_BOT =
-  "Paste your Job Description (JD), and I'll conduct a mock interview tailored to that role. This session will cost 10 AI Credits. Type Yes if you'd like to proceed.";
+  "Paste your Job Description (JD), and I'll conduct a mock interview tailored to that role. This costs 10 Credits. Type YES to proceed.";
 
 const INTERVIEW_SCRIPT = [
   "Great — paste the JD below and I'll get started. To warm up: tell me about a time you led a cross-functional project under a tight deadline.",
