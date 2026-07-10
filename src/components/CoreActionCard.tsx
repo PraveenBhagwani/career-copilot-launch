@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, CheckCircle2, FileText, Loader2, Phone, ShieldCheck, Sparkles, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+
 
 type Step = "input" | "phone" | "otp" | "loading" | "result";
 
@@ -76,11 +77,44 @@ export function CoreActionCard() {
     otpRefs.current[Math.min(text.length, 3)]?.focus();
   };
 
+  // Magnetic 3D tilt: track mouse position on card, tilt within a small range.
+  const rotX = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
+  const rotY = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
+  const shadowX = useTransform(rotY, [-8, 8], [18, -18]);
+  const shadowY = useTransform(rotX, [-8, 8], [-18, 18]);
+
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (step !== "input") return;
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotY.set(px * 10);
+    rotX.set(-py * 10);
+  };
+  const resetTilt = () => {
+    rotX.set(0);
+    rotY.set(0);
+  };
+
   return (
-    <div className="relative">
+    <motion.div
+      className="relative [perspective:1400px]"
+      onMouseMove={handleTilt}
+      onMouseLeave={resetTilt}
+    >
       <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/10 via-transparent to-success/10 blur-2xl" />
-      <div className="rounded-3xl border border-border/70 bg-card p-2 shadow-[var(--shadow-elevated)]">
+      <motion.div
+        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d" }}
+        className="rounded-3xl border border-border/70 bg-card p-2 shadow-[var(--shadow-elevated)] will-change-transform"
+      >
+        <motion.div
+          aria-hidden
+          style={{ x: shadowX, y: shadowY }}
+          className="pointer-events-none absolute inset-0 -z-10 rounded-3xl bg-primary/20 blur-2xl"
+        />
         <div className="rounded-[calc(var(--radius)+6px)] bg-gradient-to-b from-secondary/40 to-card p-6 sm:p-8">
+
           <AnimatePresence mode="wait">
             {step === "input" && (
               <motion.div
