@@ -62,7 +62,7 @@ export function TopUpDialog({
             <DialogHeader>
               <DialogTitle>Buy AI Credits</DialogTitle>
               <DialogDescription>
-                Pay instantly via UPI. Credits never expire. Instant AI delivery, non-refundable.
+                Pay instantly via UPI. Credits never expire. Instant AI delivery.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-2">
