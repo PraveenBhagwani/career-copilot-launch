@@ -135,8 +135,10 @@ function RootComponent() {
       <DashboardProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <MentorChatbot />
         <Toaster position="top-center" richColors />
       </DashboardProvider>
+
     </QueryClientProvider>
   );
 }
