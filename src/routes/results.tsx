@@ -129,8 +129,11 @@ function ScoreDial({
 }
 
 function ResultsPage() {
+  const navigate = useNavigate();
+  const { addCredits, setPlan } = useDashboard();
   const [unlocked, setUnlocked] = useState(false);
   const [paying, setPaying] = useState(false);
+  const [interceptOpen, setInterceptOpen] = useState(false);
   const paywallRef = useRef<HTMLDivElement>(null);
   const ats = unlocked ? 95 : 65;
   const probability = unlocked ? 92 : 47;
@@ -139,20 +142,46 @@ function ResultsPage() {
     paywallRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handlePay = (label: string) => {
+  const openIntercept = () => setInterceptOpen(true);
+
+  const completeOneTime = () => {
     if (paying || unlocked) return;
+    setInterceptOpen(false);
     setPaying(true);
     toast.loading("Opening UPI app…", { id: "pay" });
     setTimeout(() => {
-      toast.success(`Payment successful — ${label}`, {
+      toast.success("Payment successful — ₹29 unlock", {
         id: "pay",
-        description: "Instant AI delivery. Your premium resume is unlocked.",
+        description: "Your premium resume is unlocked.",
         icon: <CheckCircle2 className="h-4 w-4" />,
       });
       setUnlocked(true);
       setPaying(false);
     }, 1400);
   };
+
+  const purchasePlan = (tier: "Starter" | "Pro" | "Max") => {
+    setInterceptOpen(false);
+    setPaying(true);
+    toast.loading("Opening UPI app…", { id: "pay" });
+    const bonus: Record<typeof tier, number> = { Starter: 5, Pro: 50, Max: 120 };
+    const planMap: Record<typeof tier, Plan> = { Starter: "Free", Pro: "Pro", Max: "Max" };
+    setTimeout(() => {
+      setPlan(planMap[tier]);
+      addCredits(bonus[tier]);
+      toast.success(`${tier} activated`, {
+        id: "pay",
+        description: `${bonus[tier]} credits added. Redirecting to your dashboard…`,
+        icon: <Sparkles className="h-4 w-4" />,
+      });
+      setUnlocked(true);
+      setPaying(false);
+      if (tier !== "Starter") {
+        setTimeout(() => navigate({ to: "/dashboard" }), 900);
+      }
+    }, 1400);
+  };
+
 
   const statusLabel = unlocked ? "Optimized" : "Needs Work";
   const statusTone = unlocked
