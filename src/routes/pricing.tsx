@@ -17,7 +17,7 @@ export const Route = createFileRoute("/pricing")({
       { property: "og:title", content: "Pricing — Career Copilot AI" },
       {
         property: "og:description",
-        content: "Choose Starter, Pro, or Max. Instant AI delivery, non-refundable.",
+        content: "Choose Starter, Pro, or Max. Instant AI delivery.",
       },
     ],
   }),
@@ -51,7 +51,7 @@ const TIERS: Tier[] = [
       "1 full AI resume rewrite",
       "ATS score + missing keywords",
       "PDF & DOCX export",
-      "Instant AI delivery — non-refundable",
+      "Instant AI delivery",
     ],
   },
   {
@@ -98,7 +98,7 @@ function PricingPage() {
     setPlan(t.planOnPurchase);
     if (t.bonusCredits) addCredits(t.bonusCredits);
     toast.success(`${t.key} activated`, {
-      description: `${t.bonusCredits} credits added · Instant AI delivery, non-refundable.`,
+      description: `${t.bonusCredits} credits added · Instant AI delivery.`,
     });
     setTimeout(() => navigate({ to: "/dashboard" }), 700);
   };
@@ -131,7 +131,7 @@ function PricingPage() {
             Pick the plan that lands the interview.
           </h1>
           <p className="mt-3 text-base text-muted-foreground">
-            Instant AI delivery. Non-refundable. Cancel Pro or Max anytime.
+            Instant AI delivery. Cancel Pro or Max anytime.
           </p>
         </div>
 
@@ -199,7 +199,7 @@ function PricingPage() {
                     {isCurrent ? "Current plan" : t.cta}
                   </Button>
                   <p className="mt-2 text-center text-[11px] text-muted-foreground">
-                    Instant AI Delivery · Non-Refundable
+                    Instant AI Delivery
                   </p>
                 </div>
               </motion.div>
