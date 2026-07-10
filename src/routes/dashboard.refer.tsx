@@ -26,12 +26,7 @@ function Refer() {
     }
   };
 
-  const shareOnLinkedIn = () => {
-    window.open(
-      "https://www.linkedin.com/sharing/share-offsite/?url=careercopilot.ai",
-      "_blank",
-    );
-  };
+  const linkedInHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -62,14 +57,16 @@ function Refer() {
             </Button>
           </div>
 
-          <Button
-            onClick={shareOnLinkedIn}
-            className="mt-4 w-full gap-2 text-white hover:opacity-90"
+          <a
+            href={linkedInHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-sm font-medium text-white transition hover:opacity-90"
             style={{ backgroundColor: "#0A66C2" }}
-            size="lg"
           >
             <Linkedin className="h-5 w-5" /> Share on LinkedIn
-          </Button>
+          </a>
+
 
           <div className="mt-6 flex items-center justify-center gap-6 border-t border-border pt-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
