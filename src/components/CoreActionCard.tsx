@@ -433,7 +433,8 @@ export function CoreActionCard() {
             )}
           </AnimatePresence>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
+
