@@ -29,7 +29,7 @@ export function TopUpDialog({
   const buy = (credits: number, price: number) => {
     addCredits(credits);
     toast.success(`Payment received — ${credits} credits added.`, {
-      description: `₹${price} · UPI mock payment · Instant AI delivery, non-refundable.`,
+      description: `₹${price} · UPI mock payment · Instant AI delivery.`,
     });
     onOpenChange(false);
   };
