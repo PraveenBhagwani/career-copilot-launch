@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { toast } from "sonner";
@@ -14,6 +14,9 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PricingInterceptModal } from "@/components/PricingInterceptModal";
+import { useDashboard, type Plan } from "@/lib/dashboard-store";
+
 
 export const Route = createFileRoute("/results")({
   head: () => ({
