@@ -148,12 +148,24 @@ export function CoreActionCard() {
                   onDragLeave={() => setDragging(false)}
                   onDrop={handleDrop}
                   onClick={() => fileRef.current?.click()}
-                  className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 text-center transition ${
+                  className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed p-6 text-center transition ${
                     dragging
                       ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50 hover:bg-secondary/50"
+                      : file
+                        ? "border-success/60 bg-success/5"
+                        : "border-border hover:border-primary/50 hover:bg-secondary/50"
                   }`}
                 >
+                  {/* ATS scanline sweep — active once a file is uploaded */}
+                  {file && (
+                    <motion.div
+                      aria-hidden
+                      initial={{ y: "-100%" }}
+                      animate={{ y: "100%" }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" }}
+                      className="pointer-events-none absolute inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_18px_4px_oklch(0.55_0.22_265/0.5)]"
+                    />
+                  )}
                   <input
                     ref={fileRef}
                     type="file"
@@ -162,13 +174,15 @@ export function CoreActionCard() {
                     onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
                   />
                   {file ? (
-                    <div className="flex items-center gap-3 text-sm">
+                    <div className="relative flex items-center gap-3 text-sm">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-success/20 text-success-foreground">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div className="text-left">
                         <div className="font-medium text-foreground">{file.name}</div>
-                        <div className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(0)} KB · Ready</div>
+                        <div className="text-xs text-muted-foreground">
+                          {(file.size / 1024).toFixed(0)} KB · Scanning…
+                        </div>
                       </div>
                       <button
                         onClick={(e) => {
@@ -192,6 +206,7 @@ export function CoreActionCard() {
                     </>
                   )}
                 </div>
+
 
                 <Button
                   size="lg"
