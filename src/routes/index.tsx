@@ -14,6 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import { CoreActionCard } from "@/components/CoreActionCard";
+import { AmbientBackground } from "@/components/AmbientBackground";
+
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
