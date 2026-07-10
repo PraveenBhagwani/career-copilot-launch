@@ -414,14 +414,13 @@ function ResultsPage() {
                         <span className="text-xs font-semibold text-success-foreground">One-time</span>
                       </div>
                       <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-                        <Button
-                          size="lg"
+                        <MagneticGlowButton
                           disabled={paying}
-                          onClick={() => handlePay("₹29 unlock")}
-                          className="h-12 flex-1 rounded-xl bg-primary text-base font-semibold shadow-[var(--shadow-card)] hover:bg-primary/90"
+                          onClick={openIntercept}
+                          className="h-12 flex-1"
                         >
                           <Smartphone className="mr-2 h-4 w-4" /> Pay ₹29 with UPI
-                        </Button>
+                        </MagneticGlowButton>
                         <Button
                           asChild
                           size="lg"
@@ -433,8 +432,9 @@ function ResultsPage() {
                         </Button>
                       </div>
                       <p className="mt-3 text-center text-[11px] font-medium text-muted-foreground">
-                        Secure UPI · Instant AI Delivery — Non-Refundable
+                        Secure UPI · Instant AI Delivery
                       </p>
+
                     </div>
                   </motion.div>
                 </motion.div>
