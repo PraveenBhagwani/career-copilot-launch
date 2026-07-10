@@ -14,6 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import { CoreActionCard } from "@/components/CoreActionCard";
+import { AmbientBackground } from "@/components/AmbientBackground";
+
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -104,10 +106,12 @@ function Nav() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
+      <AmbientBackground />
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-40 left-1/2 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-[300px] w-[400px] rounded-full bg-success/10 blur-3xl" />
       </div>
+
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:py-24">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

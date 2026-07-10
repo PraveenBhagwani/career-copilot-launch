@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { toast } from "sonner";
@@ -14,6 +14,9 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PricingInterceptModal } from "@/components/PricingInterceptModal";
+import { useDashboard, type Plan } from "@/lib/dashboard-store";
+
 
 export const Route = createFileRoute("/results")({
   head: () => ({
@@ -126,8 +129,11 @@ function ScoreDial({
 }
 
 function ResultsPage() {
+  const navigate = useNavigate();
+  const { addCredits, setPlan } = useDashboard();
   const [unlocked, setUnlocked] = useState(false);
   const [paying, setPaying] = useState(false);
+  const [interceptOpen, setInterceptOpen] = useState(false);
   const paywallRef = useRef<HTMLDivElement>(null);
   const ats = unlocked ? 95 : 65;
   const probability = unlocked ? 92 : 47;
@@ -136,20 +142,46 @@ function ResultsPage() {
     paywallRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handlePay = (label: string) => {
+  const openIntercept = () => setInterceptOpen(true);
+
+  const completeOneTime = () => {
     if (paying || unlocked) return;
+    setInterceptOpen(false);
     setPaying(true);
     toast.loading("Opening UPI app…", { id: "pay" });
     setTimeout(() => {
-      toast.success(`Payment successful — ${label}`, {
+      toast.success("Payment successful — ₹29 unlock", {
         id: "pay",
-        description: "Instant AI delivery. Your premium resume is unlocked.",
+        description: "Your premium resume is unlocked.",
         icon: <CheckCircle2 className="h-4 w-4" />,
       });
       setUnlocked(true);
       setPaying(false);
     }, 1400);
   };
+
+  const purchasePlan = (tier: "Starter" | "Pro" | "Max") => {
+    setInterceptOpen(false);
+    setPaying(true);
+    toast.loading("Opening UPI app…", { id: "pay" });
+    const bonus: Record<typeof tier, number> = { Starter: 5, Pro: 50, Max: 120 };
+    const planMap: Record<typeof tier, Plan> = { Starter: "Free", Pro: "Pro", Max: "Max" };
+    setTimeout(() => {
+      setPlan(planMap[tier]);
+      addCredits(bonus[tier]);
+      toast.success(`${tier} activated`, {
+        id: "pay",
+        description: `${bonus[tier]} credits added. Redirecting to your dashboard…`,
+        icon: <Sparkles className="h-4 w-4" />,
+      });
+      setUnlocked(true);
+      setPaying(false);
+      if (tier !== "Starter") {
+        setTimeout(() => navigate({ to: "/dashboard" }), 900);
+      }
+    }, 1400);
+  };
+
 
   const statusLabel = unlocked ? "Optimized" : "Needs Work";
   const statusTone = unlocked
@@ -382,14 +414,13 @@ function ResultsPage() {
                         <span className="text-xs font-semibold text-success-foreground">One-time</span>
                       </div>
                       <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-                        <Button
-                          size="lg"
+                        <MagneticGlowButton
                           disabled={paying}
-                          onClick={() => handlePay("₹29 unlock")}
-                          className="h-12 flex-1 rounded-xl bg-primary text-base font-semibold shadow-[var(--shadow-card)] hover:bg-primary/90"
+                          onClick={openIntercept}
+                          className="h-12 flex-1"
                         >
                           <Smartphone className="mr-2 h-4 w-4" /> Pay ₹29 with UPI
-                        </Button>
+                        </MagneticGlowButton>
                         <Button
                           asChild
                           size="lg"
@@ -401,8 +432,9 @@ function ResultsPage() {
                         </Button>
                       </div>
                       <p className="mt-3 text-center text-[11px] font-medium text-muted-foreground">
-                        Secure UPI · Instant AI Delivery — Non-Refundable
+                        Secure UPI · Instant AI Delivery
                       </p>
+
                     </div>
                   </motion.div>
                 </motion.div>
@@ -452,7 +484,7 @@ function ResultsPage() {
         )}
       </main>
 
-      {/* Sticky pulsing CTA */}
+      {/* Sticky pulsing CTA — opens the pricing intercept modal */}
       <AnimatePresence>
         {!unlocked && (
           <motion.div
@@ -463,23 +495,83 @@ function ResultsPage() {
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4"
           >
-            <motion.button
-              onClick={scrollToPaywall}
-              animate={{
-                boxShadow: [
-                  "0 0 0 0 oklch(0.55 0.22 265 / 0.55)",
-                  "0 0 0 14px oklch(0.55 0.22 265 / 0)",
-                ],
+            <MagneticGlowButton
+              onClick={() => {
+                openIntercept();
+                scrollToPaywall();
               }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
-              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition hover:scale-[1.02]"
+              className="pointer-events-auto rounded-full px-6 py-3.5"
+              pulseRing
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="mr-2 h-4 w-4" />
               Fix My Resume — ₹29
-            </motion.button>
+            </MagneticGlowButton>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <PricingInterceptModal
+        open={interceptOpen}
+        onClose={() => setInterceptOpen(false)}
+        onSelectTier={purchasePlan}
+        onContinueOneTime={completeOneTime}
+      />
     </motion.div>
   );
 }
+
+/**
+ * Reusable primary CTA with magnetic hover (slight scale) and a
+ * continuously sweeping shimmer along its border.
+ */
+function MagneticGlowButton({
+  children,
+  onClick,
+  disabled,
+  className = "",
+  pulseRing = false,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+  pulseRing?: boolean;
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 320, damping: 20 }}
+      animate={
+        pulseRing
+          ? {
+              boxShadow: [
+                "0 0 0 0 oklch(0.55 0.22 265 / 0.55)",
+                "0 0 0 14px oklch(0.55 0.22 265 / 0)",
+              ],
+            }
+          : undefined
+      }
+      // Nested transitions: framer merges — ring uses its own duration.
+      style={{ transitionProperty: "box-shadow" }}
+      className={`group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] disabled:opacity-50 ${className}`}
+    >
+      {/* Continuous shimmer sweep on hover */}
+      <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+      {/* Rotating glow border */}
+      <span aria-hidden className="pointer-events-none absolute -inset-[1px] -z-10 overflow-hidden rounded-[inherit]">
+        <span
+          className="absolute -inset-[100%] animate-[spin_4s_linear_infinite] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{
+            background:
+              "conic-gradient(from 0deg, transparent 60%, oklch(0.72 0.2 150), transparent 90%)",
+          }}
+        />
+      </span>
+      <span className="relative flex items-center justify-center">{children}</span>
+    </motion.button>
+  );
+}
+

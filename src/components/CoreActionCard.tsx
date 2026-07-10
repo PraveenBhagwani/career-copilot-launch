@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, CheckCircle2, FileText, Loader2, Phone, ShieldCheck, Sparkles, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+
 
 type Step = "input" | "phone" | "otp" | "loading" | "result";
 
@@ -76,11 +77,44 @@ export function CoreActionCard() {
     otpRefs.current[Math.min(text.length, 3)]?.focus();
   };
 
+  // Magnetic 3D tilt: track mouse position on card, tilt within a small range.
+  const rotX = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
+  const rotY = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
+  const shadowX = useTransform(rotY, [-8, 8], [18, -18]);
+  const shadowY = useTransform(rotX, [-8, 8], [-18, 18]);
+
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (step !== "input") return;
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotY.set(px * 10);
+    rotX.set(-py * 10);
+  };
+  const resetTilt = () => {
+    rotX.set(0);
+    rotY.set(0);
+  };
+
   return (
-    <div className="relative">
+    <motion.div
+      className="relative [perspective:1400px]"
+      onMouseMove={handleTilt}
+      onMouseLeave={resetTilt}
+    >
       <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-primary/10 via-transparent to-success/10 blur-2xl" />
-      <div className="rounded-3xl border border-border/70 bg-card p-2 shadow-[var(--shadow-elevated)]">
+      <motion.div
+        style={{ rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d" }}
+        className="rounded-3xl border border-border/70 bg-card p-2 shadow-[var(--shadow-elevated)] will-change-transform"
+      >
+        <motion.div
+          aria-hidden
+          style={{ x: shadowX, y: shadowY }}
+          className="pointer-events-none absolute inset-0 -z-10 rounded-3xl bg-primary/20 blur-2xl"
+        />
         <div className="rounded-[calc(var(--radius)+6px)] bg-gradient-to-b from-secondary/40 to-card p-6 sm:p-8">
+
           <AnimatePresence mode="wait">
             {step === "input" && (
               <motion.div
@@ -114,12 +148,24 @@ export function CoreActionCard() {
                   onDragLeave={() => setDragging(false)}
                   onDrop={handleDrop}
                   onClick={() => fileRef.current?.click()}
-                  className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 text-center transition ${
+                  className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed p-6 text-center transition ${
                     dragging
                       ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50 hover:bg-secondary/50"
+                      : file
+                        ? "border-success/60 bg-success/5"
+                        : "border-border hover:border-primary/50 hover:bg-secondary/50"
                   }`}
                 >
+                  {/* ATS scanline sweep — active once a file is uploaded */}
+                  {file && (
+                    <motion.div
+                      aria-hidden
+                      initial={{ y: "-100%" }}
+                      animate={{ y: "100%" }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" }}
+                      className="pointer-events-none absolute inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_18px_4px_oklch(0.55_0.22_265/0.5)]"
+                    />
+                  )}
                   <input
                     ref={fileRef}
                     type="file"
@@ -128,13 +174,15 @@ export function CoreActionCard() {
                     onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
                   />
                   {file ? (
-                    <div className="flex items-center gap-3 text-sm">
+                    <div className="relative flex items-center gap-3 text-sm">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-success/20 text-success-foreground">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div className="text-left">
                         <div className="font-medium text-foreground">{file.name}</div>
-                        <div className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(0)} KB · Ready</div>
+                        <div className="text-xs text-muted-foreground">
+                          {(file.size / 1024).toFixed(0)} KB · Scanning…
+                        </div>
                       </div>
                       <button
                         onClick={(e) => {
@@ -158,6 +206,7 @@ export function CoreActionCard() {
                     </>
                   )}
                 </div>
+
 
                 <Button
                   size="lg"
@@ -288,20 +337,21 @@ export function CoreActionCard() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
 
-                <div className="rounded-xl border border-border/60 bg-secondary/40 px-4 py-3 text-center">
+                <div className="text-center opacity-60">
                   <p className="text-[11px] leading-relaxed text-muted-foreground">
-                    <ShieldCheck className="mr-1 inline h-3 w-3 text-primary" />
+                    <ShieldCheck className="mr-1 inline h-3 w-3" />
                     By verifying this OTP, you explicitly agree to our{" "}
-                    <a href="#" className="font-medium text-foreground underline underline-offset-2 hover:text-primary">
+                    <a href="#" className="underline underline-offset-2 hover:text-foreground">
                       Terms of Service
                     </a>{" "}
                     &amp;{" "}
-                    <a href="#" className="font-medium text-foreground underline underline-offset-2 hover:text-primary">
+                    <a href="#" className="underline underline-offset-2 hover:text-foreground">
                       Privacy Policy
                     </a>{" "}
                     for AI processing.
                   </p>
                 </div>
+
               </motion.div>
             )}
 
@@ -399,7 +449,8 @@ export function CoreActionCard() {
             )}
           </AnimatePresence>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
+

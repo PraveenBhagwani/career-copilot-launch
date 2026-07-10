@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { DashboardProvider } from "@/lib/dashboard-store";
+import { MentorChatbot } from "@/components/MentorChatbot";
+
 
 function NotFoundComponent() {
   return (
@@ -133,8 +135,10 @@ function RootComponent() {
       <DashboardProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <MentorChatbot />
         <Toaster position="top-center" richColors />
       </DashboardProvider>
+
     </QueryClientProvider>
   );
 }
