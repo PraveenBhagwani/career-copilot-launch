@@ -193,12 +193,12 @@ function Hero() {
 }
 
 function LogoRow() {
-  const logos = ["Google", "Stripe", "Meta", "Airbnb", "Shopify", "Netflix"];
+  const logos = ["Workday", "Greenhouse", "iCIMS", "Lever", "BambooHR"];
   return (
     <section className="border-y border-border/50 bg-secondary/30 py-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <p className="text-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Our users have landed interviews at
+          Engineered to parse flawlessly in the ATS platforms used by:
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {logos.map((l) => (
