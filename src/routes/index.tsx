@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { CoreActionCard } from "@/components/CoreActionCard";
 import { AmbientBackground } from "@/components/AmbientBackground";
+import { HeroVisual } from "@/components/HeroVisual";
 
 import { Button } from "@/components/ui/button";
 
@@ -57,6 +58,7 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
+      <CoreActionSection />
       <LogoRow />
       <HowItWorks />
       <Metrics />
@@ -65,6 +67,16 @@ function Landing() {
       <FAQ />
       <Footer />
     </div>
+  );
+}
+
+function CoreActionSection() {
+  return (
+    <section className="relative py-12 sm:py-16">
+      <div className="mx-auto max-w-2xl px-4 sm:px-6">
+        <CoreActionCard />
+      </div>
+    </section>
   );
 }
 
@@ -138,7 +150,7 @@ function Hero() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-success" />
-              Results in 10 seconds
+              40-Point ATS Audit
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-success" />
@@ -171,8 +183,9 @@ function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          className="relative"
         >
-          <CoreActionCard />
+          <HeroVisual />
         </motion.div>
       </div>
     </section>
@@ -180,12 +193,12 @@ function Hero() {
 }
 
 function LogoRow() {
-  const logos = ["Google", "Stripe", "Meta", "Airbnb", "Shopify", "Netflix"];
+  const logos = ["Workday", "Greenhouse", "iCIMS", "Lever", "BambooHR"];
   return (
     <section className="border-y border-border/50 bg-secondary/30 py-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <p className="text-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Our users have landed interviews at
+          Engineered to parse flawlessly in the ATS platforms used by:
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {logos.map((l) => (

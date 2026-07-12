@@ -156,16 +156,8 @@ export function CoreActionCard() {
                         : "border-border hover:border-primary/50 hover:bg-secondary/50"
                   }`}
                 >
-                  {/* ATS scanline sweep — active once a file is uploaded */}
-                  {file && (
-                    <motion.div
-                      aria-hidden
-                      initial={{ y: "-100%" }}
-                      animate={{ y: "100%" }}
-                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" }}
-                      className="pointer-events-none absolute inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_18px_4px_oklch(0.55_0.22_265/0.5)]"
-                    />
-                  )}
+                  {/* Scanline removed — only appears during loading step */}
+
                   <input
                     ref={fileRef}
                     type="file"
@@ -181,7 +173,7 @@ export function CoreActionCard() {
                       <div className="text-left">
                         <div className="font-medium text-foreground">{file.name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {(file.size / 1024).toFixed(0)} KB · Scanning…
+                          {(file.size / 1024).toFixed(0)} KB · File Selected
                         </div>
                       </div>
                       <button
