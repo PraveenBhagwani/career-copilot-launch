@@ -1,32 +1,47 @@
-## 1. Hybrid Hero — right column
+## Replace Features section with 5-Agent Bento Grid
 
-Replace the current right column (just `<CoreActionCard />`) with a new `HeroVisual` component containing:
+Swap the current 4-card `Features` section in `src/routes/index.tsx` for an asymmetrical bento grid of 5 agent cards. No routing, state, or other section changes.
 
-- **Static SVG constellation mesh** behind everything (absolute, `-z-10`, `opacity-40`): ~14 nodes connected by thin lines, faint `stroke-primary/20`. Pure SVG, no animation.
-- **Video placeholder**: `<video autoPlay loop muted playsInline poster>` sourced from `/hero.webm` (file won't exist yet; poster + a gradient fallback bg so nothing looks broken). Rounded 3xl, aspect-video, subtle border.
-- **Two floating document cards** overlaid via `absolute` + `framer-motion`:
-  - "Resume" card (top-left of video): white glass card, small mock lines, `animate={{ y: [0, -12, 0] }}` with `duration: 4`, infinite.
-  - "JD" card (bottom-right of video): same idea, `duration: 5`, `delay: 0.6` — out of sync.
-- **Glassmorphic probability pill** below video: `backdrop-blur-xl bg-white/10 border`, text "Interview Probability: 65% → 95%". Inside, a track with a motion `<motion.div>` whose `width` animates from `0%` to `100%` over 1.5s on mount (`initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ duration: 1.5, ease: "easeOut" }}`), green gradient fill.
+### Layout
 
-`CoreActionCard` moves — the hero grid becomes a single column on mobile and `lg:grid-cols-[1fr_1fr]` with card on left, visual on right. Since the card is the primary CTA, keep card on the left side of the grid on desktop and put `HeroVisual` on the right. Copy/headline block moves above (stacks) — actually to preserve current layout: keep headline/copy in left column, and swap `CoreActionCard` for `HeroVisual` in right column. `CoreActionCard` then renders below the two-column grid, centered (max-w-2xl), so nothing else breaks.
+Section title: **"Meet the 5-Agent Protocol: Your Autonomous Career Engine."** (existing display font, same section container as current Features).
 
-Alternative kept simple: replace the right-column card with `HeroVisual` and render `CoreActionCard` in a new full-width centered section right below the hero grid (before `LogoRow`).
+CSS grid, `lg:grid-cols-6`:
+- Row 1 (3 cards): each `lg:col-span-2` → Decoder, Architect, Job Radar
+- Row 2 (2 cards): Challenger `lg:col-span-3`, Diplomat `lg:col-span-3`
+- Mobile: single column stack
 
-## 2. Upload Box fix (`src/components/CoreActionCard.tsx`)
+All cards use current tokens: `rounded-2xl border border-border bg-card p-6` + subtle hover lift, so it matches the rest of the site.
 
-- Delete the always-running ATS scanline `motion.div` that renders while `file` is set.
-- On file drop/select: keep the current "File Selected" summary block (filename + size). Change subtext from "Scanning…" to "Ready to analyze".
-- "Calculate My Score" button: remove the `disabled={!canSubmitInput}` opacity dimming when a file is present but JD is short — keep JD requirement but when both present it's fully opaque and clickable (already the case; just ensure no residual opacity classes). Ensure no `Scanning` label appears before click.
-- Add the scanline animation only during the `loading` step (already covered by existing loader UI), so no change needed there.
+### Card anatomy
 
-## 3. Trust badges + logo row
+Each card contains:
+1. **Animated avatar** (pure CSS, ~96px):
+   - Central dark orb: `rounded-full bg-foreground/90` with a colored inner core specific to the agent (blue/blocks/green-sweep/audio-wave/purple).
+   - Two concentric dashed rings (`border border-dashed`), positioned absolute, spinning in opposite directions via Tailwind `animate-spin` + a custom `animate-spin-reverse` utility with slower durations (e.g. `[animation-duration:14s]` and `[animation-duration:22s]`).
+2. **Agent number + name** (e.g. `Agent 01 · Decoder`) — display font, tracked.
+3. **Subtext** (1–2 lines) explaining role.
+4. **Footer** small monospace label (`font-mono text-[11px] uppercase tracking-wider text-muted-foreground border-t border-border/60 pt-3 mt-4`).
 
-- **Hero badges row** (`src/routes/index.tsx` line ~134): replace the duplicate/second "Results in 10 seconds" — currently the three badges are "No credit card", "Results in 10 seconds", "ATS-safe formatting". Replace the middle one with **"40-Point ATS Audit"** (green `CheckCircle2` already used).
-- **LogoRow**: change heading text to `"Engineered to parse flawlessly in the ATS platforms used by:"`. Replace logo array with `["Workday", "Greenhouse", "iCIMS", "Lever", "BambooHR"]`, rendered as styled text tokens (same treatment as now — no external logo assets).
+### Agent-specific cores + copy
 
-## Technical notes
+| # | Name | Core visual | Subtext | Footer |
+|---|------|-------------|---------|--------|
+| 01 | Decoder | Blue glowing dot pulsing in orb center | Parses the JD into structured skill, seniority, and keyword signals recruiters actually filter on. | `LIVE CORE: ATS KEYWORD PARSER` |
+| 02 | Architect | 2×2 grid of small squares assembling (staggered pulse) | Rewrites your resume bullet-by-bullet to hit the exact phrasing of the target role. | `CREDIT ACTION: 1 CREDIT / REWRITE` |
+| 03 | Job Radar | Green radar sweep line (rotating conic-gradient wedge) | Continuously scans openings that match your rewritten resume and pushes the best fits to you. | `DELIVERY: AUTOMATED WHATSAPP PUSH` |
+| 04 | Challenger | 4 vertical bars animating heights (audio-wave keyframes) | Runs mock interviews tuned to the JD and grades your answers in real time. | `CREDIT ACTION: 10 CREDITS / SESSION` |
+| 05 | Diplomat | Purple orb with slow breathing scale + glow | Coaches your salary negotiation with data-backed counter-offers and scripts. | `CAPABILITY: SALARY NEGOTIATION` |
 
-- All new motion uses existing `framer-motion` (already installed).
-- No routing changes, no state store changes. `CoreActionCard` state machine untouched except scanline removal + copy tweak.
-- SVG mesh + video placeholder live inside a new component `HeroVisual` colocated in `src/routes/index.tsx` (or `src/components/HeroVisual.tsx` if it grows). Video `src` points to `/hero.webm` in `public/`; if missing, the poster/gradient fallback keeps layout intact — no build break.
+### Technical notes
+
+- New keyframes added to `src/styles.css`: `spin-reverse`, `audio-wave` (4 bars with staggered `animation-delay`), `radar-sweep` (rotate conic gradient), `breathe` (scale 1 → 1.08). All pure CSS, no framer-motion required.
+- Reuse existing color tokens; add `--agent-blue`, `--agent-green`, `--agent-purple` via `oklch()` if not already present, otherwise use `primary` / `success` / a purple oklch inline in the component only if a token is unavailable (prefer adding tokens).
+- Monospace footer uses `font-mono` (already available via Tailwind default stack).
+- Keep the section `id="features"` so the nav anchor still works.
+- No changes to other sections, routes, or state.
+
+### Files touched
+
+- `src/routes/index.tsx` — replace the `Features` component body.
+- `src/styles.css` — add keyframes + agent color tokens + `.animate-spin-reverse` utility.
