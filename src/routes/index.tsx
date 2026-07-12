@@ -58,6 +58,7 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
+      <CoreActionSection />
       <LogoRow />
       <HowItWorks />
       <Metrics />
@@ -66,6 +67,16 @@ function Landing() {
       <FAQ />
       <Footer />
     </div>
+  );
+}
+
+function CoreActionSection() {
+  return (
+    <section className="relative py-12 sm:py-16">
+      <div className="mx-auto max-w-2xl px-4 sm:px-6">
+        <CoreActionCard />
+      </div>
+    </section>
   );
 }
 
