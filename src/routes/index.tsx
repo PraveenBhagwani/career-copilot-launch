@@ -283,31 +283,141 @@ function Metrics() {
   );
 }
 
+function AgentAvatar({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative flex h-24 w-24 items-center justify-center">
+      <div className="absolute inset-0 rounded-full border border-dashed border-foreground/20 animate-spin [animation-duration:14s]" />
+      <div className="absolute inset-2 rounded-full border border-dashed border-foreground/15 animate-spin-reverse [animation-duration:22s]" />
+      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-foreground/90 shadow-[inset_0_0_20px_rgba(0,0,0,0.6)]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+type Agent = {
+  num: string;
+  name: string;
+  subtext: string;
+  footer: string;
+  core: ReactNode;
+  span: string;
+};
+
 function Features() {
-  const items = [
-    { icon: Target, title: "ATS keyword targeting", body: "Match the exact phrasing recruiters filter for." },
-    { icon: Zap, title: "Instant rewrite engine", body: "Rewritten bullets in seconds, tuned per role." },
-    { icon: BrainCircuit, title: "Interview probability score", body: "Know your odds before you hit apply." },
-    { icon: Sparkles, title: "Truthful by design", body: "AI polishes what's there — never fabricates." },
+  const agents: Agent[] = [
+    {
+      num: "01",
+      name: "Decoder",
+      subtext:
+        "Parses the JD into structured skill, seniority, and keyword signals recruiters actually filter on.",
+      footer: "LIVE CORE: ATS KEYWORD PARSER",
+      span: "lg:col-span-2",
+      core: (
+        <div className="h-3 w-3 rounded-full bg-[oklch(0.7_0.19_258)] shadow-[0_0_14px_oklch(0.7_0.19_258)] animate-breathe" />
+      ),
+    },
+    {
+      num: "02",
+      name: "Architect",
+      subtext:
+        "Rewrites your resume bullet-by-bullet to hit the exact phrasing of the target role.",
+      footer: "CREDIT ACTION: 1 CREDIT / REWRITE",
+      span: "lg:col-span-2",
+      core: (
+        <div className="grid grid-cols-2 gap-1">
+          {[0, 0.2, 0.4, 0.6].map((d, i) => (
+            <div
+              key={i}
+              className="h-2.5 w-2.5 rounded-[2px] bg-primary animate-pulse"
+              style={{ animationDelay: `${d}s`, animationDuration: "1.4s" }}
+            />
+          ))}
+        </div>
+      ),
+    },
+    {
+      num: "03",
+      name: "Job Radar",
+      subtext:
+        "Continuously scans openings that match your rewritten resume and pushes the best fits to you.",
+      footer: "DELIVERY: AUTOMATED WHATSAPP PUSH",
+      span: "lg:col-span-2",
+      core: (
+        <div className="relative h-10 w-10 overflow-hidden rounded-full">
+          <div className="absolute inset-0 rounded-full border border-[oklch(0.82_0.24_145)]/40" />
+          <div
+            className="absolute inset-0 animate-radar"
+            style={{
+              background:
+                "conic-gradient(from 0deg, oklch(0.82 0.24 145 / 0.7) 0deg, transparent 90deg)",
+            }}
+          />
+          <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[oklch(0.82_0.24_145)]" />
+        </div>
+      ),
+    },
+    {
+      num: "04",
+      name: "Challenger",
+      subtext:
+        "Runs mock interviews tuned to the JD and grades your answers in real time.",
+      footer: "CREDIT ACTION: 10 CREDITS / SESSION",
+      span: "lg:col-span-3",
+      core: (
+        <div className="flex items-center gap-1">
+          {[0, 0.15, 0.3, 0.45].map((d, i) => (
+            <div
+              key={i}
+              className="h-6 w-1 origin-center rounded-full bg-primary animate-wave"
+              style={{ animationDelay: `${d}s` }}
+            />
+          ))}
+        </div>
+      ),
+    },
+    {
+      num: "05",
+      name: "Diplomat",
+      subtext:
+        "Coaches your salary negotiation with data-backed counter-offers and scripts.",
+      footer: "CAPABILITY: SALARY NEGOTIATION",
+      span: "lg:col-span-3",
+      core: (
+        <div className="h-6 w-6 rounded-full bg-[oklch(0.62_0.22_300)] shadow-[0_0_20px_oklch(0.62_0.22_300)] animate-breathe" />
+      ),
+    },
   ];
+
   return (
     <section id="features" className="py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <div className="text-sm font-medium text-primary">Features</div>
+          <div className="text-sm font-medium text-primary">The Protocol</div>
           <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight">
-            Everything you need to beat the bots
+            Meet the 5-Agent Protocol: Your Autonomous Career Engine.
           </h2>
         </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
-          {items.map((f) => (
-            <div key={f.title} className="flex gap-4 rounded-2xl border border-border bg-card p-6">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <f.icon className="h-5 w-5" />
+        <div className="mt-12 grid gap-4 lg:grid-cols-6">
+          {agents.map((a) => (
+            <div
+              key={a.num}
+              className={`group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40 hover:shadow-[var(--shadow-card)] ${a.span}`}
+            >
+              <div className="flex items-start justify-between">
+                <AgentAvatar>{a.core}</AgentAvatar>
+                <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                  Agent {a.num}
+                </span>
               </div>
-              <div>
-                <h3 className="font-display text-base font-semibold">{f.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{f.body}</p>
+              <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">
+                {a.name}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                {a.subtext}
+              </p>
+              <div className="mt-4 border-t border-border/60 pt-3 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+                {a.footer}
               </div>
             </div>
           ))}
@@ -316,6 +426,7 @@ function Features() {
     </section>
   );
 }
+
 
 function Testimonials() {
   const quotes = [
