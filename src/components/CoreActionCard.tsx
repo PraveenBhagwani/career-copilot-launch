@@ -173,7 +173,7 @@ export function CoreActionCard() {
                       <div className="text-left">
                         <div className="font-medium text-foreground">{file.name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {(file.size / 1024).toFixed(0)} KB · Scanning…
+                          {(file.size / 1024).toFixed(0)} KB · File Selected
                         </div>
                       </div>
                       <button
