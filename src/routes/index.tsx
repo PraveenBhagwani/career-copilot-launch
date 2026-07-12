@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
