@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { CoreActionCard } from "@/components/CoreActionCard";
 import { AmbientBackground } from "@/components/AmbientBackground";
+import { HeroVisual } from "@/components/HeroVisual";
 
 import { Button } from "@/components/ui/button";
 
