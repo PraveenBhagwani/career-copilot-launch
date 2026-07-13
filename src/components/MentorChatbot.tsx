@@ -24,14 +24,14 @@ export function MentorChatbot() {
 
   const persona = isMax
     ? {
-        name: "AI Interview Coach",
+        name: "Navigator · AI Interview Coach",
         greet:
           "You're on Max — I'm your dedicated Interview Coach. Tap the mic or type an answer and I'll grade you in real time.",
         placeholder: "Type your answer, or tap mic to speak…",
         accent: "from-[oklch(0.62_0.2_150)] to-[oklch(0.55_0.22_265)]",
       }
     : {
-        name: "Career Mentor",
+        name: "Navigator",
         greet: "Hey! 👋 Wondering which plan is right for you? Ask me anything!",
         placeholder: "Ask about plans, credits, features…",
         accent: "from-primary to-[oklch(0.55_0.22_265)]",
