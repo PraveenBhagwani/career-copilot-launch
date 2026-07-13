@@ -101,6 +101,7 @@ const TIERS: Tier[] = [
 function PricingPage() {
   const { plan, setPlan, addCredits } = useDashboard();
   const navigate = useNavigate();
+  const countdown = useMidnightCountdown();
 
   const purchase = (t: Tier) => {
     setPlan(t.planOnPurchase);
