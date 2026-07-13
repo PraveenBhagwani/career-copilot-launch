@@ -44,6 +44,8 @@ const TIERS: Tier[] = [
   {
     key: "Starter",
     price: 29,
+    originalPrice: 299,
+    badge: "Valid Today Only — 90% OFF",
     cadence: "one-time",
     tagline: "Unlock a single 95% resume rewrite.",
     planOnPurchase: "Free",
