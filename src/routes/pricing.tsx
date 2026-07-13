@@ -28,6 +28,8 @@ export const Route = createFileRoute("/pricing")({
 type Tier = {
   key: "Starter" | "Pro" | "Max";
   price: number;
+  originalPrice: number;
+  badge?: string;
   cadence: string;
   tagline: string;
   planOnPurchase: Plan;
