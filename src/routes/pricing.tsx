@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Crown, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useDashboard, type Plan } from "@/lib/dashboard-store";
+import { useMidnightCountdown } from "@/hooks/use-midnight-countdown";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
