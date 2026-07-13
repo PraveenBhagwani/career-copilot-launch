@@ -20,7 +20,18 @@ export function MentorChatbot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
+  const [showProactive, setShowProactive] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("navigator_proactive_shown") === "1") return;
+    const id = setTimeout(() => {
+      setShowProactive(true);
+      sessionStorage.setItem("navigator_proactive_shown", "1");
+    }, 5000);
+    return () => clearTimeout(id);
+  }, []);
 
   const persona = isMax
     ? {
