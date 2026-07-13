@@ -76,7 +76,7 @@ export function MentorChatbot() {
             className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${persona.accent} text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.22_265/0.6)] transition hover:scale-105`}
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-primary/30" />
-            {isMax ? <Sparkles className="relative h-6 w-6" /> : <Bot className="relative h-6 w-6" />}
+            <Sparkles className="relative h-6 w-6 animate-pulse" />
           </motion.button>
         )}
       </AnimatePresence>
