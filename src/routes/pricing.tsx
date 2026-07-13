@@ -79,6 +79,8 @@ const TIERS: Tier[] = [
   {
     key: "Max",
     price: 499,
+    originalPrice: 1499,
+    badge: "Save ₹1,000",
     cadence: "/ 30 days",
     tagline: "For serious job seekers running weekly applications.",
     planOnPurchase: "Max",
