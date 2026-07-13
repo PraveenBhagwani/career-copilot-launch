@@ -221,6 +221,11 @@ function PricingPage() {
                   <p className="mt-2 text-center text-[11px] text-muted-foreground">
                     Instant AI Delivery
                   </p>
+                  {t.key === "Starter" && (
+                    <p className="mt-2 text-center font-mono text-xs text-muted-foreground">
+                      Offer ends in {countdown.formatted}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             );
