@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Mic, Send, Sparkles, X } from "lucide-react";
+import { Mic, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,18 +20,29 @@ export function MentorChatbot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
+  const [showProactive, setShowProactive] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("navigator_proactive_shown") === "1") return;
+    const id = setTimeout(() => {
+      setShowProactive(true);
+      sessionStorage.setItem("navigator_proactive_shown", "1");
+    }, 5000);
+    return () => clearTimeout(id);
+  }, []);
 
   const persona = isMax
     ? {
-        name: "AI Interview Coach",
+        name: "Navigator · AI Interview Coach",
         greet:
           "You're on Max — I'm your dedicated Interview Coach. Tap the mic or type an answer and I'll grade you in real time.",
         placeholder: "Type your answer, or tap mic to speak…",
         accent: "from-[oklch(0.62_0.2_150)] to-[oklch(0.55_0.22_265)]",
       }
     : {
-        name: "Career Mentor",
+        name: "Navigator",
         greet: "Hey! 👋 Wondering which plan is right for you? Ask me anything!",
         placeholder: "Ask about plans, credits, features…",
         accent: "from-primary to-[oklch(0.55_0.22_265)]",
@@ -71,13 +82,50 @@ export function MentorChatbot() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+              setShowProactive(false);
+            }}
             aria-label={`Open ${persona.name}`}
             className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${persona.accent} text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.22_265/0.6)] transition hover:scale-105`}
           >
             <span className="absolute inset-0 animate-ping rounded-full bg-primary/30" />
-            {isMax ? <Sparkles className="relative h-6 w-6" /> : <Bot className="relative h-6 w-6" />}
+            <Sparkles className="relative h-6 w-6 animate-pulse" />
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Proactive bubble */}
+      <AnimatePresence>
+        {showProactive && !open && (
+          <motion.div
+            key="proactive"
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed bottom-24 right-5 z-50 max-w-[280px]"
+          >
+            <div className="relative rounded-2xl border border-border/60 bg-card/95 p-3.5 pr-8 text-sm leading-relaxed text-foreground shadow-[0_20px_50px_-15px_oklch(0.2_0.05_265/0.4)] backdrop-blur-xl">
+              <button
+                onClick={() => setShowProactive(false)}
+                aria-label="Dismiss"
+                className="absolute right-1.5 top-1.5 rounded-full p-1 text-muted-foreground hover:bg-secondary hover:text-foreground"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setShowProactive(false);
+                }}
+                className="text-left"
+              >
+                👋 Hi! I'm Navigator. Need help understanding your ATS score or our plans? Ask me anything!
+              </button>
+              <span className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 border-b border-r border-border/60 bg-card/95" />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -95,7 +143,7 @@ export function MentorChatbot() {
             <div className={`flex items-center justify-between bg-gradient-to-r ${persona.accent} px-4 py-3 text-primary-foreground`}>
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-                  {isMax ? <Sparkles className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                  <Sparkles className="h-4 w-4" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold leading-tight">{persona.name}</div>

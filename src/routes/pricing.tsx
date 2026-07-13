@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Crown, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useDashboard, type Plan } from "@/lib/dashboard-store";
+import { useMidnightCountdown } from "@/hooks/use-midnight-countdown";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -27,6 +28,8 @@ export const Route = createFileRoute("/pricing")({
 type Tier = {
   key: "Starter" | "Pro" | "Max";
   price: number;
+  originalPrice: number;
+  badge?: string;
   cadence: string;
   tagline: string;
   planOnPurchase: Plan;
@@ -41,6 +44,8 @@ const TIERS: Tier[] = [
   {
     key: "Starter",
     price: 29,
+    originalPrice: 299,
+    badge: "Valid Today Only — 90% OFF",
     cadence: "one-time",
     tagline: "Unlock a single 95% resume rewrite.",
     planOnPurchase: "Free",
@@ -57,6 +62,7 @@ const TIERS: Tier[] = [
   {
     key: "Pro",
     price: 299,
+    originalPrice: 999,
     cadence: "/ 30 days",
     tagline: "Everything in Starter, plus the credit store & job matches.",
     planOnPurchase: "Pro",
@@ -73,6 +79,8 @@ const TIERS: Tier[] = [
   {
     key: "Max",
     price: 499,
+    originalPrice: 1499,
+    badge: "Save ₹1,000",
     cadence: "/ 30 days",
     tagline: "For serious job seekers running weekly applications.",
     planOnPurchase: "Max",
@@ -93,6 +101,7 @@ const TIERS: Tier[] = [
 function PricingPage() {
   const { plan, setPlan, addCredits } = useDashboard();
   const navigate = useNavigate();
+  const countdown = useMidnightCountdown();
 
   const purchase = (t: Tier) => {
     setPlan(t.planOnPurchase);
@@ -170,7 +179,18 @@ function PricingPage() {
                   <div className="font-display text-xl font-semibold">{t.key}</div>
                 </div>
 
-                <div className="mt-6 flex items-baseline gap-1.5">
+                {t.badge && (
+                  <div className="mt-4 inline-flex w-fit items-center rounded-full bg-destructive/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-destructive">
+                    {t.badge}
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-baseline gap-2">
+                  <span className="font-display text-lg text-muted-foreground line-through">
+                    ₹{t.originalPrice}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1.5">
                   <span className="font-display text-5xl font-bold tracking-tight">₹{t.price}</span>
                   <span className="text-sm text-muted-foreground">{t.cadence}</span>
                 </div>
@@ -201,6 +221,11 @@ function PricingPage() {
                   <p className="mt-2 text-center text-[11px] text-muted-foreground">
                     Instant AI Delivery
                   </p>
+                  {t.key === "Starter" && (
+                    <p className="mt-2 text-center font-mono text-xs text-muted-foreground">
+                      Offer ends in {countdown.formatted}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             );

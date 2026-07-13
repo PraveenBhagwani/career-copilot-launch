@@ -1,47 +1,39 @@
-## Replace Features section with 5-Agent Bento Grid
+# Pricing FOMO + Navigator Chatbot Upgrade
 
-Swap the current 4-card `Features` section in `src/routes/index.tsx` for an asymmetrical bento grid of 5 agent cards. No routing, state, or other section changes.
+## 1. Price Anchoring & Countdown Timer
 
-### Layout
+**File: `src/routes/pricing.tsx`**
+- Extend the `TIERS` config with `originalPrice` and `badge`:
+  - Starter: `originalPrice: 299`, `badge: "Valid Today Only — 90% OFF"`
+  - Pro: `originalPrice: 999`, no special badge (just strikethrough)
+  - Max: `originalPrice: 1499`, `badge: "Save ₹1,000"` (in addition to existing "Most Popular")
+- In the price block, render `<span className="line-through text-muted-foreground text-lg">₹{originalPrice}</span>` above the current ₹price.
+- Render the discount badge as a small pill near the tier header (distinct from the existing "Most Popular" ribbon so both can coexist on Max).
+- Mirror the same anchor prices + badges inside `src/components/PricingInterceptModal.tsx` so the intercept upsell stays consistent.
 
-Section title: **"Meet the 5-Agent Protocol: Your Autonomous Career Engine."** (existing display font, same section container as current Features).
+**New file: `src/hooks/use-midnight-countdown.ts`**
+- Custom hook returning `{ hours, minutes, seconds }` counting down to local 23:59:59.
+- Uses `setInterval(1s)`; SSR-safe (initialize with zeros, compute inside `useEffect`); cleans up on unmount.
 
-CSS grid, `lg:grid-cols-6`:
-- Row 1 (3 cards): each `lg:col-span-2` → Decoder, Architect, Job Radar
-- Row 2 (2 cards): Challenger `lg:col-span-3`, Diplomat `lg:col-span-3`
-- Mobile: single column stack
+**Usage on pricing page**
+- Below the Starter ₹29 CTA button only, render:
+  `<p className="font-mono text-xs text-muted-foreground">Offer ends in {hh}h {mm}m {ss}s</p>`
 
-All cards use current tokens: `rounded-2xl border border-border bg-card p-6` + subtle hover lift, so it matches the rest of the site.
+## 2. Chatbot → "Navigator"
 
-### Card anatomy
+**File: `src/components/MentorChatbot.tsx`**
+- Rename displayed name from "Mentor"/"Coach" branding to **Navigator** (keep Max-tier "AI Interview Coach" persona label intact inside the chat header if present, but the floating widget brand is Navigator).
+- Replace the floating widget's launcher icon with `Sparkles` from `lucide-react`, wrapped with `animate-pulse` for a breathing effect.
+- Add a proactive bubble:
+  - New state `showProactive: boolean`.
+  - `useEffect` on mount: `setTimeout(() => setShowProactive(true), 5000)`; clear on unmount.
+  - Bubble hides when: user opens the chat, or clicks a dismiss (×) on the bubble.
+  - Only show once per session (guard via `sessionStorage` key `navigator_proactive_shown`).
+- Bubble UI: positioned absolutely above the launcher, glassmorphic card, framer-motion fade+slide-in, arrow pointing down to the icon. Copy:
+  `"👋 Hi! I'm Navigator. Need help understanding your ATS score or our plans? Ask me anything!"`
+- Clicking the bubble opens the chat.
 
-Each card contains:
-1. **Animated avatar** (pure CSS, ~96px):
-   - Central dark orb: `rounded-full bg-foreground/90` with a colored inner core specific to the agent (blue/blocks/green-sweep/audio-wave/purple).
-   - Two concentric dashed rings (`border border-dashed`), positioned absolute, spinning in opposite directions via Tailwind `animate-spin` + a custom `animate-spin-reverse` utility with slower durations (e.g. `[animation-duration:14s]` and `[animation-duration:22s]`).
-2. **Agent number + name** (e.g. `Agent 01 · Decoder`) — display font, tracked.
-3. **Subtext** (1–2 lines) explaining role.
-4. **Footer** small monospace label (`font-mono text-[11px] uppercase tracking-wider text-muted-foreground border-t border-border/60 pt-3 mt-4`).
-
-### Agent-specific cores + copy
-
-| # | Name | Core visual | Subtext | Footer |
-|---|------|-------------|---------|--------|
-| 01 | Decoder | Blue glowing dot pulsing in orb center | Parses the JD into structured skill, seniority, and keyword signals recruiters actually filter on. | `LIVE CORE: ATS KEYWORD PARSER` |
-| 02 | Architect | 2×2 grid of small squares assembling (staggered pulse) | Rewrites your resume bullet-by-bullet to hit the exact phrasing of the target role. | `CREDIT ACTION: 1 CREDIT / REWRITE` |
-| 03 | Job Radar | Green radar sweep line (rotating conic-gradient wedge) | Continuously scans openings that match your rewritten resume and pushes the best fits to you. | `DELIVERY: AUTOMATED WHATSAPP PUSH` |
-| 04 | Challenger | 4 vertical bars animating heights (audio-wave keyframes) | Runs mock interviews tuned to the JD and grades your answers in real time. | `CREDIT ACTION: 10 CREDITS / SESSION` |
-| 05 | Diplomat | Purple orb with slow breathing scale + glow | Coaches your salary negotiation with data-backed counter-offers and scripts. | `CAPABILITY: SALARY NEGOTIATION` |
-
-### Technical notes
-
-- New keyframes added to `src/styles.css`: `spin-reverse`, `audio-wave` (4 bars with staggered `animation-delay`), `radar-sweep` (rotate conic gradient), `breathe` (scale 1 → 1.08). All pure CSS, no framer-motion required.
-- Reuse existing color tokens; add `--agent-blue`, `--agent-green`, `--agent-purple` via `oklch()` if not already present, otherwise use `primary` / `success` / a purple oklch inline in the component only if a token is unavailable (prefer adding tokens).
-- Monospace footer uses `font-mono` (already available via Tailwind default stack).
-- Keep the section `id="features"` so the nav anchor still works.
-- No changes to other sections, routes, or state.
-
-### Files touched
-
-- `src/routes/index.tsx` — replace the `Features` component body.
-- `src/styles.css` — add keyframes + agent color tokens + `.animate-spin-reverse` utility.
+## Technical Notes
+- No routing, state store, or backend changes.
+- Countdown hook is client-only; guarded to avoid SSR hydration mismatch (initial render shows `00h 00m 00s`, updates on mount).
+- Sparkles icon usage is only for the Navigator identity mark (intentional exception — user explicitly requested Lucide Sparkles).
