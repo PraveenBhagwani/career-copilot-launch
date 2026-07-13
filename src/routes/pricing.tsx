@@ -179,7 +179,18 @@ function PricingPage() {
                   <div className="font-display text-xl font-semibold">{t.key}</div>
                 </div>
 
-                <div className="mt-6 flex items-baseline gap-1.5">
+                {t.badge && (
+                  <div className="mt-4 inline-flex w-fit items-center rounded-full bg-destructive/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-destructive">
+                    {t.badge}
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-baseline gap-2">
+                  <span className="font-display text-lg text-muted-foreground line-through">
+                    ₹{t.originalPrice}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1.5">
                   <span className="font-display text-5xl font-bold tracking-tight">₹{t.price}</span>
                   <span className="text-sm text-muted-foreground">{t.cadence}</span>
                 </div>
