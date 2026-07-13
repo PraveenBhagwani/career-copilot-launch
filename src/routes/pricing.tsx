@@ -62,6 +62,7 @@ const TIERS: Tier[] = [
   {
     key: "Pro",
     price: 299,
+    originalPrice: 999,
     cadence: "/ 30 days",
     tagline: "Everything in Starter, plus the credit store & job matches.",
     planOnPurchase: "Pro",
