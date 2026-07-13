@@ -95,7 +95,7 @@ export function MentorChatbot() {
             <div className={`flex items-center justify-between bg-gradient-to-r ${persona.accent} px-4 py-3 text-primary-foreground`}>
               <div className="flex items-center gap-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-                  {isMax ? <Sparkles className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                  <Sparkles className="h-4 w-4" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold leading-tight">{persona.name}</div>
