@@ -95,6 +95,40 @@ export function MentorChatbot() {
         )}
       </AnimatePresence>
 
+      {/* Proactive bubble */}
+      <AnimatePresence>
+        {showProactive && !open && (
+          <motion.div
+            key="proactive"
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed bottom-24 right-5 z-50 max-w-[280px]"
+          >
+            <div className="relative rounded-2xl border border-border/60 bg-card/95 p-3.5 pr-8 text-sm leading-relaxed text-foreground shadow-[0_20px_50px_-15px_oklch(0.2_0.05_265/0.4)] backdrop-blur-xl">
+              <button
+                onClick={() => setShowProactive(false)}
+                aria-label="Dismiss"
+                className="absolute right-1.5 top-1.5 rounded-full p-1 text-muted-foreground hover:bg-secondary hover:text-foreground"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setShowProactive(false);
+                }}
+                className="text-left"
+              >
+                👋 Hi! I'm Navigator. Need help understanding your ATS score or our plans? Ask me anything!
+              </button>
+              <span className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 border-b border-r border-border/60 bg-card/95" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Panel */}
       <AnimatePresence>
         {open && (
