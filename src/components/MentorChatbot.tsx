@@ -82,7 +82,10 @@ export function MentorChatbot() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+              setShowProactive(false);
+            }}
             aria-label={`Open ${persona.name}`}
             className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${persona.accent} text-primary-foreground shadow-[0_10px_40px_-10px_oklch(0.55_0.22_265/0.6)] transition hover:scale-105`}
           >
