@@ -22,7 +22,7 @@ export function CoreActionCard() {
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loadingIdx, setLoadingIdx] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
