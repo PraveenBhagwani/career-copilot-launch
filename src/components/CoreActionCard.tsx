@@ -297,7 +297,7 @@ export function CoreActionCard() {
                   </p>
                 </div>
 
-                <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
+                <div className="flex justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
                   {otp.map((d, i) => (
                     <input
                       key={i}
