@@ -83,8 +83,6 @@ function Nav() {
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#how" className="text-sm text-muted-foreground hover:text-foreground">How it works</a>
           <a href="#features" className="text-sm text-muted-foreground hover:text-foreground">Features</a>
-          <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</Link>
-          <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</Link>
           <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
@@ -94,8 +92,15 @@ function Nav() {
           >
             Sign in
           </Link>
-          <Button asChild className="rounded-lg bg-primary font-semibold">
-            <Link to="/dashboard">Get started</Link>
+          <Button
+            onClick={() =>
+              document
+                .getElementById("upload-section")
+                ?.scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+            className="rounded-lg bg-primary font-semibold"
+          >
+            Get started
           </Button>
         </div>
       </div>
