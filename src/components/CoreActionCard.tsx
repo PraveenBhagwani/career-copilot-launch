@@ -314,7 +314,7 @@ export function CoreActionCard() {
                       inputMode="numeric"
                       maxLength={1}
                       autoFocus={i === 0}
-                      className="h-16 w-14 rounded-xl border-2 border-border bg-background text-center font-display text-2xl font-semibold text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
+                      className="h-14 w-11 rounded-xl border-2 border-border bg-background text-center font-display text-xl font-semibold text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 sm:h-16 sm:w-12 sm:text-2xl"
                     />
                   ))}
                 </div>
