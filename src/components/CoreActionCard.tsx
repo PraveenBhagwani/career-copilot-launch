@@ -250,7 +250,7 @@ export function CoreActionCard() {
                       inputMode="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="(555) 123-4567"
+                      placeholder="98765 43210"
                       className="border-0 bg-transparent text-base shadow-none focus-visible:ring-0"
                     />
                   </div>
