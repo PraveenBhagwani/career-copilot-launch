@@ -459,7 +459,12 @@ function Testimonials() {
               </div>
               <p className="text-sm leading-relaxed text-foreground">"{q.body}"</p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary/60 to-primary" />
+                <img
+                  src={q.avatar}
+                  alt={q.name}
+                  loading="lazy"
+                  className="h-9 w-9 rounded-full object-cover"
+                />
                 <div className="text-sm">
                   <div className="font-semibold">{q.name}</div>
                   <div className="text-xs text-muted-foreground">{q.role}</div>
