@@ -68,16 +68,6 @@ function Landing() {
   );
 }
 
-function CoreActionSection() {
-  return (
-    <section className="relative py-12 sm:py-16">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <CoreActionCard />
-      </div>
-    </section>
-  );
-}
-
 function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
