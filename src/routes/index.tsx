@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { CoreActionCard } from "@/components/CoreActionCard";
 import { AmbientBackground } from "@/components/AmbientBackground";
-import { HeroVisual } from "@/components/HeroVisual";
 
 import { Button } from "@/components/ui/button";
 
@@ -58,7 +57,6 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
-      <CoreActionSection />
       <LogoRow />
       <HowItWorks />
       <Metrics />
@@ -67,16 +65,6 @@ function Landing() {
       <FAQ />
       <Footer />
     </div>
-  );
-}
-
-function CoreActionSection() {
-  return (
-    <section className="relative py-12 sm:py-16">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6">
-        <CoreActionCard />
-      </div>
-    </section>
   );
 }
 
@@ -180,12 +168,13 @@ function Hero() {
         </motion.div>
 
         <motion.div
+          id="upload-section"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="relative"
+          className="relative flex items-center justify-center"
         >
-          <HeroVisual />
+          <CoreActionCard />
         </motion.div>
       </div>
     </section>
