@@ -428,16 +428,19 @@ function Testimonials() {
       body: "Went from 0 callbacks in 3 months to 4 interviews the first week I used Career Copilot.",
       name: "Priya S.",
       role: "Product Designer",
+      avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     },
     {
       body: "The probability score is scary accurate. Bumped mine from 62% to 94% and got the offer.",
       name: "Marcus T.",
       role: "Backend Engineer",
+      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     },
     {
       body: "Finally a tool that doesn't make me sound like a robot wrote my resume.",
       name: "Ana R.",
       role: "Marketing Lead",
+      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     },
   ];
   return (
