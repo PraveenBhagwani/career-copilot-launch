@@ -55,7 +55,7 @@ export function CoreActionCard() {
     if (f) handleFile(f);
   };
 
-  const canSubmitInput = jd.trim().length > 20 && !!file;
+  const canSubmitInput = !!file;
   const canSubmitPhone = phone.replace(/\D/g, "").length >= 10;
   const canSubmitOtp = otp.every((d) => d.length === 1);
 
@@ -64,17 +64,17 @@ export function CoreActionCard() {
     const next = [...otp];
     next[i] = digit;
     setOtp(next);
-    if (digit && i < 3) otpRefs.current[i + 1]?.focus();
+    if (digit && i < 5) otpRefs.current[i + 1]?.focus();
   };
 
   const handleOtpPaste = (e: React.ClipboardEvent) => {
-    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
     if (!text) return;
     e.preventDefault();
-    const next = ["", "", "", ""];
+    const next = ["", "", "", "", "", ""];
     text.split("").forEach((c, i) => (next[i] = c));
     setOtp(next);
-    otpRefs.current[Math.min(text.length, 3)]?.focus();
+    otpRefs.current[Math.min(text.length, 5)]?.focus();
   };
 
   // Magnetic 3D tilt: track mouse position on card, tilt within a small range.
