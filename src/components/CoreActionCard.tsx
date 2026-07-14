@@ -207,7 +207,7 @@ export function CoreActionCard() {
                   className="group h-12 w-full rounded-xl bg-primary text-base font-semibold shadow-[var(--shadow-card)] hover:bg-primary/90"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
-                  Calculate My Score
+                  Get My Free ATS Score
                   <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5" />
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
