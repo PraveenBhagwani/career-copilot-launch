@@ -257,7 +257,7 @@ function Metrics() {
     { value: "3.4x", label: "more interviews per application" },
     { value: "95%", label: "average ATS match after rewrite" },
     { value: "10s", label: "to full resume analysis" },
-    { value: "12k+", label: "job seekers already hired" },
+    { value: "12k+", label: "resumes successfully optimized" },
   ];
   return (
     <section className="border-y border-border/60 bg-gradient-to-b from-secondary/40 to-background py-16">
