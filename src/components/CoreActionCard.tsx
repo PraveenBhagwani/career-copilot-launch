@@ -234,16 +234,16 @@ export function CoreActionCard() {
                     Where should we send your score?
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
-                    We'll text you a 4-digit code to unlock your report.
+                    We'll send a secure 6-digit code to your WhatsApp to unlock your report.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-foreground">Phone number</label>
+                  <label className="text-xs font-medium text-foreground">WhatsApp Number</label>
                   <div className="flex items-stretch overflow-hidden rounded-xl border border-border bg-background focus-within:ring-2 focus-within:ring-primary/30">
                     <div className="flex items-center gap-1.5 border-r border-border bg-secondary/60 px-3 text-sm font-medium text-foreground">
                       <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                      +1
+                      +91
                     </div>
                     <Input
                       autoFocus
