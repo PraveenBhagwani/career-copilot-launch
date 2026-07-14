@@ -287,13 +287,13 @@ export function CoreActionCard() {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-foreground">
                     <CheckCircle2 className="h-3.5 w-3.5 text-success-foreground" />
-                    Code sent to +1 {phone}
+                    Code sent to +91 {phone}
                   </div>
                   <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight">
-                    Enter your 4-digit code
+                    Enter your 6-digit code
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
-                    Check your messages — it usually arrives in seconds.
+                    Check your WhatsApp — it usually arrives in seconds.
                   </p>
                 </div>
 
