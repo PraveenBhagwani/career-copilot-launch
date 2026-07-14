@@ -22,7 +22,7 @@ export function CoreActionCard() {
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loadingIdx, setLoadingIdx] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -55,7 +55,7 @@ export function CoreActionCard() {
     if (f) handleFile(f);
   };
 
-  const canSubmitInput = jd.trim().length > 20 && !!file;
+  const canSubmitInput = !!file;
   const canSubmitPhone = phone.replace(/\D/g, "").length >= 10;
   const canSubmitOtp = otp.every((d) => d.length === 1);
 
@@ -64,17 +64,17 @@ export function CoreActionCard() {
     const next = [...otp];
     next[i] = digit;
     setOtp(next);
-    if (digit && i < 3) otpRefs.current[i + 1]?.focus();
+    if (digit && i < 5) otpRefs.current[i + 1]?.focus();
   };
 
   const handleOtpPaste = (e: React.ClipboardEvent) => {
-    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
     if (!text) return;
     e.preventDefault();
-    const next = ["", "", "", ""];
+    const next = ["", "", "", "", "", ""];
     text.split("").forEach((c, i) => (next[i] = c));
     setOtp(next);
-    otpRefs.current[Math.min(text.length, 3)]?.focus();
+    otpRefs.current[Math.min(text.length, 5)]?.focus();
   };
 
   // Magnetic 3D tilt: track mouse position on card, tilt within a small range.
@@ -207,7 +207,7 @@ export function CoreActionCard() {
                   className="group h-12 w-full rounded-xl bg-primary text-base font-semibold shadow-[var(--shadow-card)] hover:bg-primary/90"
                 >
                   <Sparkles className="mr-2 h-4 w-4" />
-                  Calculate My Score
+                  Get My Free ATS Score
                   <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-0.5" />
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
@@ -234,23 +234,23 @@ export function CoreActionCard() {
                     Where should we send your score?
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
-                    We'll text you a 4-digit code to unlock your report.
+                    We'll send a secure 6-digit code to your WhatsApp to unlock your report.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-foreground">Phone number</label>
+                  <label className="text-xs font-medium text-foreground">WhatsApp Number</label>
                   <div className="flex items-stretch overflow-hidden rounded-xl border border-border bg-background focus-within:ring-2 focus-within:ring-primary/30">
                     <div className="flex items-center gap-1.5 border-r border-border bg-secondary/60 px-3 text-sm font-medium text-foreground">
                       <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                      +1
+                      +91
                     </div>
                     <Input
                       autoFocus
                       inputMode="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="(555) 123-4567"
+                      placeholder="98765 43210"
                       className="border-0 bg-transparent text-base shadow-none focus-visible:ring-0"
                     />
                   </div>
@@ -287,17 +287,17 @@ export function CoreActionCard() {
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-foreground">
                     <CheckCircle2 className="h-3.5 w-3.5 text-success-foreground" />
-                    Code sent to +1 {phone}
+                    Code sent to +91 {phone}
                   </div>
                   <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight">
-                    Enter your 4-digit code
+                    Enter your 6-digit code
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
-                    Check your messages — it usually arrives in seconds.
+                    Check your WhatsApp — it usually arrives in seconds.
                   </p>
                 </div>
 
-                <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
+                <div className="flex justify-center gap-2 sm:gap-3" onPaste={handleOtpPaste}>
                   {otp.map((d, i) => (
                     <input
                       key={i}
@@ -314,7 +314,7 @@ export function CoreActionCard() {
                       inputMode="numeric"
                       maxLength={1}
                       autoFocus={i === 0}
-                      className="h-16 w-14 rounded-xl border-2 border-border bg-background text-center font-display text-2xl font-semibold text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
+                      className="h-14 w-11 rounded-xl border-2 border-border bg-background text-center font-display text-xl font-semibold text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 sm:h-16 sm:w-12 sm:text-2xl"
                     />
                   ))}
                 </div>

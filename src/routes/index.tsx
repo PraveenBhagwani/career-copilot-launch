@@ -83,8 +83,6 @@ function Nav() {
         <nav className="hidden items-center gap-8 md:flex">
           <a href="#how" className="text-sm text-muted-foreground hover:text-foreground">How it works</a>
           <a href="#features" className="text-sm text-muted-foreground hover:text-foreground">Features</a>
-          <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</Link>
-          <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</Link>
           <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground">FAQ</a>
         </nav>
         <div className="flex items-center gap-2">
@@ -94,8 +92,15 @@ function Nav() {
           >
             Sign in
           </Link>
-          <Button asChild className="rounded-lg bg-primary font-semibold">
-            <Link to="/dashboard">Get started</Link>
+          <Button
+            onClick={() =>
+              document
+                .getElementById("upload-section")
+                ?.scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+            className="rounded-lg bg-primary font-semibold"
+          >
+            Get started
           </Button>
         </div>
       </div>
@@ -252,7 +257,7 @@ function Metrics() {
     { value: "3.4x", label: "more interviews per application" },
     { value: "95%", label: "average ATS match after rewrite" },
     { value: "10s", label: "to full resume analysis" },
-    { value: "12k+", label: "job seekers already hired" },
+    { value: "12k+", label: "resumes successfully optimized" },
   ];
   return (
     <section className="border-y border-border/60 bg-gradient-to-b from-secondary/40 to-background py-16">
@@ -423,16 +428,19 @@ function Testimonials() {
       body: "Went from 0 callbacks in 3 months to 4 interviews the first week I used Career Copilot.",
       name: "Priya S.",
       role: "Product Designer",
+      avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     },
     {
       body: "The probability score is scary accurate. Bumped mine from 62% to 94% and got the offer.",
       name: "Marcus T.",
       role: "Backend Engineer",
+      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     },
     {
       body: "Finally a tool that doesn't make me sound like a robot wrote my resume.",
       name: "Ana R.",
       role: "Marketing Lead",
+      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     },
   ];
   return (
@@ -451,7 +459,12 @@ function Testimonials() {
               </div>
               <p className="text-sm leading-relaxed text-foreground">"{q.body}"</p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary/60 to-primary" />
+                <img
+                  src={q.avatar}
+                  alt={q.name}
+                  loading="lazy"
+                  className="h-9 w-9 rounded-full object-cover"
+                />
                 <div className="text-sm">
                   <div className="font-semibold">{q.name}</div>
                   <div className="text-xs text-muted-foreground">{q.role}</div>
@@ -490,9 +503,16 @@ function FAQ() {
         <div className="mt-14 rounded-3xl border border-border bg-gradient-to-br from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-[var(--shadow-elevated)]">
           <h3 className="font-display text-3xl font-semibold tracking-tight">Your next interview is one upload away.</h3>
           <p className="mx-auto mt-2 max-w-md text-sm opacity-90">Join 12,400+ job seekers using Career Copilot to skip the ghost pile.</p>
-          <Link to="/dashboard" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90">
+          <button
+            onClick={() =>
+              document
+                .getElementById("upload-section")
+                ?.scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-background px-5 py-3 text-sm font-semibold text-primary transition hover:opacity-90"
+          >
             Get my score free <ArrowRight className="h-4 w-4" />
-          </Link>
+          </button>
         </div>
       </div>
     </section>
