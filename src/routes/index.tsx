@@ -178,12 +178,13 @@ function Hero() {
         </motion.div>
 
         <motion.div
+          id="upload-section"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="relative"
+          className="relative flex items-center justify-center"
         >
-          <HeroVisual />
+          <CoreActionCard />
         </motion.div>
       </div>
     </section>
