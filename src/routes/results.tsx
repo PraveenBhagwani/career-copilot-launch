@@ -452,7 +452,7 @@ function ResultsPage() {
           >
             <MagneticGlowButton
               onClick={() => {
-                openIntercept();
+                openUpgrade();
                 scrollToPaywall();
               }}
               className="pointer-events-auto rounded-full px-6 py-3.5"
@@ -465,12 +465,7 @@ function ResultsPage() {
         )}
       </AnimatePresence>
 
-      <PricingInterceptModal
-        open={interceptOpen}
-        onClose={() => setInterceptOpen(false)}
-        onSelectTier={purchasePlan}
-        onContinueOneTime={completeOneTime}
-      />
+      <UpgradeModal />
     </motion.div>
   );
 }
