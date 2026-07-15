@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from
 import { toast } from "sonner";
 import {
   ArrowLeft,
+  CheckCircle2,
   Download,
   FileText,
   Lock,
