@@ -23,7 +23,7 @@ export function TopUpDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const { plan, addCredits } = useDashboard();
+  const { plan, addCredits, openUpgrade } = useDashboard();
 
   const buy = (credits: number, price: number) => {
     addCredits(credits);
