@@ -381,8 +381,7 @@ function ResultsPage() {
                       </div>
                       <div className="mt-5">
                         <MagneticGlowButton
-                          disabled={paying}
-                          onClick={openIntercept}
+                          onClick={openUpgrade}
                           className="h-12 w-full"
                         >
                           <Smartphone className="mr-2 h-4 w-4" /> Pay ₹29 with UPI
