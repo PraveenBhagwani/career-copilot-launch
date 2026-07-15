@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResultsRouteImport } from './routes/results'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
@@ -21,11 +20,6 @@ import { Route as DashboardCoachRouteImport } from './routes/dashboard.coach'
 const ResultsRoute = ResultsRouteImport.update({
   id: '/results',
   path: '/results',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -62,7 +56,6 @@ const DashboardCoachRoute = DashboardCoachRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
@@ -71,7 +64,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
@@ -82,7 +74,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
-  '/pricing': typeof PricingRoute
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
@@ -94,7 +85,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/pricing'
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
@@ -103,7 +93,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/pricing'
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
@@ -113,7 +102,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/pricing'
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
@@ -124,7 +112,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
-  PricingRoute: typeof PricingRoute
   ResultsRoute: typeof ResultsRoute
 }
 
@@ -135,13 +122,6 @@ declare module '@tanstack/react-router' {
       path: '/results'
       fullPath: '/results'
       preLoaderRoute: typeof ResultsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -210,7 +190,6 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
-  PricingRoute: PricingRoute,
   ResultsRoute: ResultsRoute,
 }
 export const routeTree = rootRouteImport
