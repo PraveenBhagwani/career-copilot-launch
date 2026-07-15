@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Crown, Sparkles, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useMidnightCountdown } from "@/hooks/use-midnight-countdown";
 
 type Tier = {
   key: "Starter" | "Pro" | "Max";
   price: number;
+  originalPrice: number;
   cadence: string;
   tagline: string;
   bullets: string[];
@@ -16,27 +18,45 @@ const TIERS: Tier[] = [
   {
     key: "Starter",
     price: 29,
+    originalPrice: 299,
     cadence: "one-time",
     tagline: "Unlock this one resume.",
     icon: Zap,
-    bullets: ["1 full AI rewrite", "ATS score + gaps", "PDF & DOCX export"],
+    bullets: [
+      "1 full AI resume rewrite",
+      "ATS score + missing keywords",
+      "PDF & DOCX export",
+    ],
   },
   {
     key: "Pro",
     price: 299,
+    originalPrice: 999,
     cadence: "/ 30 days",
     tagline: "Unlimited rewrites + job matches.",
     icon: Sparkles,
-    bullets: ["50 AI credits", "Credit store access", "Curated job matches"],
+    bullets: [
+      "✓ Everything in Starter, PLUS:",
+      "50 AI credits included",
+      "Credit store access (20 / 50 / 100)",
+      "Curated job matches with 1-click apply",
+    ],
   },
   {
     key: "Max",
     price: 499,
+    originalPrice: 1499,
     cadence: "/ 30 days",
     tagline: "Serious job seekers only.",
     icon: Crown,
     popular: true,
-    bullets: ["120 credits + 25% bonus", "AI Interview Coach + voice", "Recruiter shortlist boost"],
+    bullets: [
+      "✓ Everything in Pro, PLUS:",
+      "100 Credits",
+      "Alternate-day Job Radar",
+      "Live Interview Practice",
+      "Salary Negotiation scripts",
+    ],
   },
 ];
 
@@ -51,6 +71,8 @@ export function PricingInterceptModal({
   onSelectTier: (tier: "Starter" | "Pro" | "Max") => void;
   onContinueOneTime: () => void;
 }) {
+  const countdown = useMidnightCountdown();
+
   return (
     <AnimatePresence>
       {open && (
@@ -88,67 +110,108 @@ export function PricingInterceptModal({
               <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
                 One-time fixes this resume. A plan fixes every resume you'll ever send.
               </p>
+              <p className="mt-4 font-mono text-sm text-muted-foreground">
+                Special Pricing ends in {countdown.formatted}
+              </p>
             </div>
 
             <div className="grid gap-4 p-6 sm:p-8 lg:grid-cols-3">
-              {TIERS.map((t) => (
-                <div
-                  key={t.key}
-                  className={`relative flex flex-col rounded-2xl border bg-background p-6 ${
-                    t.popular ? "border-primary/40 lg:scale-[1.03]" : "border-border/70"
-                  }`}
-                >
-                  {t.popular && (
-                    <>
-                      {/* Slow rotating conic gradient border */}
-                      <div className="pointer-events-none absolute -inset-[2px] -z-10 overflow-hidden rounded-2xl">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                          className="absolute -inset-1/2"
-                          style={{
-                            background:
-                              "conic-gradient(from 0deg, oklch(0.55 0.22 265), oklch(0.72 0.2 150), oklch(0.78 0.17 45), oklch(0.55 0.22 265))",
-                          }}
-                        />
-                      </div>
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-[oklch(0.55_0.22_265)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow-lg">
-                        ★ Best Value
-                      </span>
-                    </>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${t.popular ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary"}`}>
-                      <t.icon className="h-4 w-4" />
-                    </div>
-                    <div className="font-display text-lg font-semibold">{t.key}</div>
-                  </div>
-                  <div className="mt-4 flex items-baseline gap-1.5">
-                    <span className="font-display text-4xl font-bold tracking-tight">₹{t.price}</span>
-                    <span className="text-xs text-muted-foreground">{t.cadence}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted-foreground">{t.tagline}</p>
-                  <ul className="mt-4 space-y-2 border-t border-border/60 pt-4 text-sm">
-                    {t.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-success-foreground" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    onClick={() => onSelectTier(t.key)}
-                    size="lg"
-                    className={`mt-5 h-11 w-full rounded-xl text-sm font-semibold ${
-                      t.popular
-                        ? "bg-primary hover:bg-primary/90"
-                        : "bg-foreground text-background hover:bg-foreground/90"
+              {TIERS.map((t) => {
+                const isMax = t.popular;
+                return (
+                  <div
+                    key={t.key}
+                    className={`relative flex flex-col rounded-2xl border p-6 ${
+                      isMax
+                        ? "border-white/10 bg-[oklch(0.18_0.02_260)] text-white lg:scale-[1.03] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]"
+                        : "border-border/70 bg-background"
                     }`}
                   >
-                    Choose {t.key} — ₹{t.price}
-                  </Button>
-                </div>
-              ))}
+                    {isMax && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black shadow-lg">
+                        ★ Most Popular
+                      </span>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+                          isMax
+                            ? "bg-white/10 text-white"
+                            : "bg-primary/10 text-primary"
+                        }`}
+                      >
+                        <t.icon className="h-4 w-4" />
+                      </div>
+                      <div className="font-display text-lg font-semibold">{t.key}</div>
+                    </div>
+                    <div
+                      className={`mt-4 font-display text-sm line-through ${
+                        isMax ? "text-white/40" : "text-muted-foreground"
+                      }`}
+                    >
+                      ₹{t.originalPrice}
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="font-display text-4xl font-bold tracking-tight">
+                        ₹{t.price}
+                      </span>
+                      <span
+                        className={`text-xs ${
+                          isMax ? "text-white/60" : "text-muted-foreground"
+                        }`}
+                      >
+                        {t.cadence}
+                      </span>
+                    </div>
+                    <p
+                      className={`mt-1 text-xs ${
+                        isMax ? "text-white/60" : "text-muted-foreground"
+                      }`}
+                    >
+                      {t.tagline}
+                    </p>
+                    <ul
+                      className={`mt-4 space-y-2 border-t pt-4 text-sm ${
+                        isMax ? "border-white/10" : "border-border/60"
+                      }`}
+                    >
+                      {t.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2">
+                          {b.startsWith("✓") ? (
+                            <span
+                              className={`text-xs font-semibold ${
+                                isMax ? "text-white/80" : "text-foreground"
+                              }`}
+                            >
+                              {b}
+                            </span>
+                          ) : (
+                            <>
+                              <Check
+                                className={`mt-0.5 h-4 w-4 shrink-0 ${
+                                  isMax ? "text-emerald-400" : "text-success-foreground"
+                                }`}
+                              />
+                              <span>{b}</span>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      onClick={() => onSelectTier(t.key)}
+                      size="lg"
+                      className={`mt-5 h-11 w-full rounded-xl text-sm font-semibold ${
+                        isMax
+                          ? "bg-white text-black hover:bg-white/90"
+                          : "bg-foreground text-background hover:bg-foreground/90"
+                      }`}
+                    >
+                      Choose {t.key} — ₹{t.price}
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="border-t border-border/60 bg-secondary/30 px-6 py-4 text-center sm:px-8">
