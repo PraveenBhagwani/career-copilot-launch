@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type Plan = "Free" | "Pro" | "Max";
+export type Plan = "Free" | "Starter" | "Pro" | "Max";
 
 type DashboardState = {
   credits: number;
@@ -9,6 +9,9 @@ type DashboardState = {
   addCredits: (n: number) => void;
   spendCredits: (n: number) => boolean;
   setPlan: (p: Plan) => void;
+  upgradeOpen: boolean;
+  openUpgrade: () => void;
+  closeUpgrade: () => void;
 };
 
 const Ctx = createContext<DashboardState | null>(null);
