@@ -77,9 +77,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     persist(credits, p);
   }, [credits]);
 
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const openUpgrade = useCallback(() => setUpgradeOpen(true), []);
+  const closeUpgrade = useCallback(() => setUpgradeOpen(false), []);
+
   const value = useMemo(
-    () => ({ credits, plan, referralCode, addCredits, spendCredits, setPlan }),
-    [credits, plan, referralCode, addCredits, spendCredits, setPlan],
+    () => ({ credits, plan, referralCode, addCredits, spendCredits, setPlan, upgradeOpen, openUpgrade, closeUpgrade }),
+    [credits, plan, referralCode, addCredits, spendCredits, setPlan, upgradeOpen, openUpgrade, closeUpgrade],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
