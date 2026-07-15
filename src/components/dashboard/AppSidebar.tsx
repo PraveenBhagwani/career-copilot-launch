@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Sparkles } from "lucide-react";
+import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Rocket, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sidebar,
@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useDashboard } from "@/lib/dashboard-store";
 
 const items: Array<{ title: string; url: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }> = [
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
@@ -24,6 +25,7 @@ const items: Array<{ title: string; url: string; icon: React.ComponentType<{ cla
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { openUpgrade } = useDashboard();
   const isActive = (url: string, exact?: boolean) =>
     exact ? pathname === url : pathname === url || pathname.startsWith(url + "/");
 
@@ -61,6 +63,23 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={openUpgrade}
+                  tooltip="Upgrade Plan"
+                  className="bg-gradient-to-r from-primary to-[oklch(0.55_0.2_265)] font-semibold text-primary-foreground shadow-md hover:opacity-90 hover:text-primary-foreground data-[active=true]:text-primary-foreground"
+                >
+                  <Rocket className="h-4 w-4" />
+                  <span>🚀 Upgrade Plan</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
