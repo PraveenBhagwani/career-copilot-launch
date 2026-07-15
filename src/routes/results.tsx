@@ -406,35 +406,28 @@ function ResultsPage() {
                         <Sparkles className="h-3 w-3" /> Limited · One-time offer
                       </div>
                       <h3 className="mt-2 font-display text-xl font-semibold tracking-tight sm:text-2xl">
-                        Unlock 95/100 Resume &amp; 3 Job Matches
+                        Unlock 90+ ATS Resume
                       </h3>
-                      <div className="mt-1 flex items-baseline gap-2">
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary/15 to-success/20 px-3 py-1 text-[11px] font-semibold text-foreground">
+                        🎁 BONUS: Includes 3 Custom Job Matches
+                      </div>
+                      <div className="mt-3 flex items-baseline gap-2">
                         <span className="font-display text-3xl font-bold text-primary">₹29</span>
-                        <span className="text-sm text-muted-foreground line-through">₹149</span>
+                        <span className="text-sm text-muted-foreground line-through">₹299</span>
                         <span className="text-xs font-semibold text-success-foreground">One-time</span>
                       </div>
-                      <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+                      <div className="mt-5">
                         <MagneticGlowButton
                           disabled={paying}
                           onClick={openIntercept}
-                          className="h-12 flex-1"
+                          className="h-12 w-full"
                         >
                           <Smartphone className="mr-2 h-4 w-4" /> Pay ₹29 with UPI
                         </MagneticGlowButton>
-                        <Button
-                          asChild
-                          size="lg"
-                          variant="outline"
-                          disabled={paying}
-                          className="h-12 flex-1 rounded-xl border-border/80 bg-background text-sm font-semibold sm:flex-none sm:px-5"
-                        >
-                          <Link to="/pricing">Or 30-Day Pro Pass · ₹299</Link>
-                        </Button>
                       </div>
                       <p className="mt-3 text-center text-[11px] font-medium text-muted-foreground">
                         Secure UPI · Instant AI Delivery
                       </p>
-
                     </div>
                   </motion.div>
                 </motion.div>
