@@ -1,8 +1,10 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Gift, LayoutDashboard, MessageSquareText, Sparkles } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -21,8 +23,18 @@ const items: Array<{ title: string; url: string; icon: React.ComponentType<{ cla
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const isActive = (url: string, exact?: boolean) =>
     exact ? pathname === url : pathname === url || pathname.startsWith(url + "/");
+
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem("cc_credits");
+      localStorage.removeItem("cc_plan");
+    } catch {}
+    toast.success("Signed out", { description: "Your session has been cleared." });
+    navigate({ to: "/", replace: true });
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -53,6 +65,20 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-foreground"
+              tooltip="Sign Out"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Sign Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
