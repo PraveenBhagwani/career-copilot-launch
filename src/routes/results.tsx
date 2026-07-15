@@ -14,8 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PricingInterceptModal } from "@/components/PricingInterceptModal";
-import { useDashboard, type Plan } from "@/lib/dashboard-store";
+import { UpgradeModal } from "@/components/UpgradeModal";
+import { useDashboard } from "@/lib/dashboard-store";
 
 
 export const Route = createFileRoute("/results")({
