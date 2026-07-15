@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { toast } from "sonner";
@@ -14,8 +14,8 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PricingInterceptModal } from "@/components/PricingInterceptModal";
-import { useDashboard, type Plan } from "@/lib/dashboard-store";
+import { UpgradeModal } from "@/components/UpgradeModal";
+import { useDashboard } from "@/lib/dashboard-store";
 
 
 export const Route = createFileRoute("/results")({
@@ -129,58 +129,21 @@ function ScoreDial({
 }
 
 function ResultsPage() {
-  const navigate = useNavigate();
-  const { addCredits, setPlan } = useDashboard();
+  const { plan, openUpgrade } = useDashboard();
   const [unlocked, setUnlocked] = useState(false);
-  const [paying, setPaying] = useState(false);
-  const [interceptOpen, setInterceptOpen] = useState(false);
   const paywallRef = useRef<HTMLDivElement>(null);
   const ats = unlocked ? 95 : 65;
   const probability = unlocked ? 92 : 47;
+
+  // Any paid plan unlocks the results page.
+  useEffect(() => {
+    if (plan !== "Free") setUnlocked(true);
+  }, [plan]);
 
   const scrollToPaywall = () => {
     paywallRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const openIntercept = () => setInterceptOpen(true);
-
-  const completeOneTime = () => {
-    if (paying || unlocked) return;
-    setInterceptOpen(false);
-    setPaying(true);
-    toast.loading("Opening UPI app…", { id: "pay" });
-    setTimeout(() => {
-      toast.success("Payment successful — ₹29 unlock", {
-        id: "pay",
-        description: "Your premium resume is unlocked.",
-        icon: <CheckCircle2 className="h-4 w-4" />,
-      });
-      setUnlocked(true);
-      setPaying(false);
-    }, 1400);
-  };
-
-  const purchasePlan = (tier: "Starter" | "Pro" | "Max") => {
-    setInterceptOpen(false);
-    setPaying(true);
-    toast.loading("Opening UPI app…", { id: "pay" });
-    const bonus: Record<typeof tier, number> = { Starter: 5, Pro: 50, Max: 120 };
-    const planMap: Record<typeof tier, Plan> = { Starter: "Free", Pro: "Pro", Max: "Max" };
-    setTimeout(() => {
-      setPlan(planMap[tier]);
-      addCredits(bonus[tier]);
-      toast.success(`${tier} activated`, {
-        id: "pay",
-        description: `${bonus[tier]} credits added. Redirecting to your dashboard…`,
-        icon: <Sparkles className="h-4 w-4" />,
-      });
-      setUnlocked(true);
-      setPaying(false);
-      if (tier !== "Starter") {
-        setTimeout(() => navigate({ to: "/dashboard" }), 900);
-      }
-    }, 1400);
-  };
 
 
   const statusLabel = unlocked ? "Optimized" : "Needs Work";
@@ -418,8 +381,7 @@ function ResultsPage() {
                       </div>
                       <div className="mt-5">
                         <MagneticGlowButton
-                          disabled={paying}
-                          onClick={openIntercept}
+                          onClick={openUpgrade}
                           className="h-12 w-full"
                         >
                           <Smartphone className="mr-2 h-4 w-4" /> Pay ₹29 with UPI
@@ -490,7 +452,7 @@ function ResultsPage() {
           >
             <MagneticGlowButton
               onClick={() => {
-                openIntercept();
+                openUpgrade();
                 scrollToPaywall();
               }}
               className="pointer-events-auto rounded-full px-6 py-3.5"
@@ -503,12 +465,7 @@ function ResultsPage() {
         )}
       </AnimatePresence>
 
-      <PricingInterceptModal
-        open={interceptOpen}
-        onClose={() => setInterceptOpen(false)}
-        onSelectTier={purchasePlan}
-        onContinueOneTime={completeOneTime}
-      />
+      <UpgradeModal />
     </motion.div>
   );
 }

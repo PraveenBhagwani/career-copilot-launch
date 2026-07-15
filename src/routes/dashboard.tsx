@@ -2,6 +2,7 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -23,6 +24,7 @@ function DashboardLayout() {
           <Outlet />
         </main>
       </SidebarInset>
+      <UpgradeModal />
     </SidebarProvider>
   );
 }

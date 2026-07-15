@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Lock, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,7 @@ export function TopUpDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const { plan, addCredits } = useDashboard();
+  const { plan, addCredits, openUpgrade } = useDashboard();
 
   const buy = (credits: number, price: number) => {
     addCredits(credits);
@@ -51,10 +50,15 @@ export function TopUpDialog({
                 unlock the credit store.
               </DialogDescription>
             </DialogHeader>
-            <Button asChild className="w-full gap-2" size="lg" onClick={() => onOpenChange(false)}>
-              <Link to="/pricing">
-                <Sparkles className="h-4 w-4" /> See plans — Starter / Pro / Max
-              </Link>
+            <Button
+              className="w-full gap-2"
+              size="lg"
+              onClick={() => {
+                onOpenChange(false);
+                openUpgrade();
+              }}
+            >
+              <Sparkles className="h-4 w-4" /> See plans — Starter / Pro / Max
             </Button>
           </>
         ) : (
@@ -95,10 +99,16 @@ export function TopUpDialog({
               ))}
             </div>
             {plan === "Pro" && (
-              <Button asChild variant="outline" size="sm" className="mt-1">
-                <Link to="/pricing" onClick={() => onOpenChange(false)}>
-                  Compare Pro vs Max →
-                </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-1"
+                onClick={() => {
+                  onOpenChange(false);
+                  openUpgrade();
+                }}
+              >
+                Compare Pro vs Max →
               </Button>
             )}
           </>

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type Plan = "Free" | "Pro" | "Max";
+export type Plan = "Free" | "Starter" | "Pro" | "Max";
 
 type DashboardState = {
   credits: number;
@@ -9,6 +9,9 @@ type DashboardState = {
   addCredits: (n: number) => void;
   spendCredits: (n: number) => boolean;
   setPlan: (p: Plan) => void;
+  upgradeOpen: boolean;
+  openUpgrade: () => void;
+  closeUpgrade: () => void;
 };
 
 const Ctx = createContext<DashboardState | null>(null);
@@ -37,7 +40,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("cc_refcode", ref);
       }
       if (c !== null) setCredits(Number(c));
-      if (p === "Free" || p === "Pro" || p === "Max") setPlanState(p);
+      if (p === "Free" || p === "Starter" || p === "Pro" || p === "Max") setPlanState(p);
       setReferralCode(ref);
     } catch {}
   }, []);
@@ -74,9 +77,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     persist(credits, p);
   }, [credits]);
 
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const openUpgrade = useCallback(() => setUpgradeOpen(true), []);
+  const closeUpgrade = useCallback(() => setUpgradeOpen(false), []);
+
   const value = useMemo(
-    () => ({ credits, plan, referralCode, addCredits, spendCredits, setPlan }),
-    [credits, plan, referralCode, addCredits, spendCredits, setPlan],
+    () => ({ credits, plan, referralCode, addCredits, spendCredits, setPlan, upgradeOpen, openUpgrade, closeUpgrade }),
+    [credits, plan, referralCode, addCredits, spendCredits, setPlan, upgradeOpen, openUpgrade, closeUpgrade],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
