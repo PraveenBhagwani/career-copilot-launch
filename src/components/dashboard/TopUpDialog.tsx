@@ -50,10 +50,15 @@ export function TopUpDialog({
                 unlock the credit store.
               </DialogDescription>
             </DialogHeader>
-            <Button asChild className="w-full gap-2" size="lg" onClick={() => onOpenChange(false)}>
-              <Link to="/pricing">
-                <Sparkles className="h-4 w-4" /> See plans — Starter / Pro / Max
-              </Link>
+            <Button
+              className="w-full gap-2"
+              size="lg"
+              onClick={() => {
+                onOpenChange(false);
+                openUpgrade();
+              }}
+            >
+              <Sparkles className="h-4 w-4" /> See plans — Starter / Pro / Max
             </Button>
           </>
         ) : (
