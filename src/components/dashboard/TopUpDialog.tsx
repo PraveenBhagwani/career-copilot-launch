@@ -99,10 +99,16 @@ export function TopUpDialog({
               ))}
             </div>
             {plan === "Pro" && (
-              <Button asChild variant="outline" size="sm" className="mt-1">
-                <Link to="/pricing" onClick={() => onOpenChange(false)}>
-                  Compare Pro vs Max →
-                </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-1"
+                onClick={() => {
+                  onOpenChange(false);
+                  openUpgrade();
+                }}
+              >
+                Compare Pro vs Max →
               </Button>
             )}
           </>
