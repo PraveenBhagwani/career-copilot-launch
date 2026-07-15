@@ -40,7 +40,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("cc_refcode", ref);
       }
       if (c !== null) setCredits(Number(c));
-      if (p === "Free" || p === "Pro" || p === "Max") setPlanState(p);
+      if (p === "Free" || p === "Starter" || p === "Pro" || p === "Max") setPlanState(p);
       setReferralCode(ref);
     } catch {}
   }, []);
