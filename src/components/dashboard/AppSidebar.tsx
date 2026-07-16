@@ -18,7 +18,7 @@ import { useDashboard } from "@/lib/dashboard-store";
 const items: Array<{ title: string; url: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }> = [
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
   { title: "Jobs", url: "/dashboard/jobs", icon: Briefcase },
-  { title: "AI Coach", url: "/dashboard/coach", icon: MessageSquareText },
+  { title: "Hivemind AI", url: "/dashboard/coach", icon: MessageSquareText },
   { title: "Refer & Earn", url: "/dashboard/refer", icon: Gift },
 ];
 
