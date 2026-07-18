@@ -14,6 +14,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardReferRouteImport } from './routes/dashboard.refer'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardJobsRouteImport } from './routes/dashboard.jobs'
 import { Route as DashboardCoachRouteImport } from './routes/dashboard.coach'
 
@@ -42,6 +43,11 @@ const DashboardReferRoute = DashboardReferRouteImport.update({
   path: '/refer',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardJobsRoute = DashboardJobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/refer': typeof DashboardReferRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/refer': typeof DashboardReferRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/results': typeof ResultsRoute
   '/dashboard/coach': typeof DashboardCoachRoute
   '/dashboard/jobs': typeof DashboardJobsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/refer': typeof DashboardReferRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
+    | '/dashboard/profile'
     | '/dashboard/refer'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
+    | '/dashboard/profile'
     | '/dashboard/refer'
     | '/dashboard'
   id:
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/results'
     | '/dashboard/coach'
     | '/dashboard/jobs'
+    | '/dashboard/profile'
     | '/dashboard/refer'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -152,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardReferRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/jobs': {
       id: '/dashboard/jobs'
       path: '/jobs'
@@ -172,6 +191,7 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteChildren {
   DashboardCoachRoute: typeof DashboardCoachRoute
   DashboardJobsRoute: typeof DashboardJobsRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardReferRoute: typeof DashboardReferRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -179,6 +199,7 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCoachRoute: DashboardCoachRoute,
   DashboardJobsRoute: DashboardJobsRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
   DashboardReferRoute: DashboardReferRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
