@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Rocket, Sparkles } from "lucide-react";
+import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Rocket, Sparkles, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sidebar,
