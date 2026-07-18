@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Rocket, Sparkles } from "lucide-react";
+import { Briefcase, Gift, LayoutDashboard, LogOut, MessageSquareText, Rocket, Sparkles, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sidebar,
@@ -19,6 +19,7 @@ const items: Array<{ title: string; url: string; icon: React.ComponentType<{ cla
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
   { title: "Jobs", url: "/dashboard/jobs", icon: Briefcase },
   { title: "Hivemind AI", url: "/dashboard/coach", icon: MessageSquareText },
+  { title: "Profile", url: "/dashboard/profile", icon: UserCircle },
   { title: "Refer & Earn", url: "/dashboard/refer", icon: Gift },
 ];
 
