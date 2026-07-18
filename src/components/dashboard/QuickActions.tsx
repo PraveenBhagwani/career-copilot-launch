@@ -165,5 +165,3 @@ function ActionDialog({
   );
 }
 
-// Keep Card export helper unused-friendly
-export const _cardShim = { Card, CardHeader, CardTitle, CardContent };
