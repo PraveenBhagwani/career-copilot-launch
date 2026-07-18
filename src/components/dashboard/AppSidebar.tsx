@@ -19,6 +19,7 @@ const items: Array<{ title: string; url: string; icon: React.ComponentType<{ cla
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
   { title: "Jobs", url: "/dashboard/jobs", icon: Briefcase },
   { title: "Hivemind AI", url: "/dashboard/coach", icon: MessageSquareText },
+  { title: "Profile", url: "/dashboard/profile", icon: UserCircle },
   { title: "Refer & Earn", url: "/dashboard/refer", icon: Gift },
 ];
 
